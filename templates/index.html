@@ -106,18 +106,22 @@
                 </div>
 
                 <!-- Stats -->
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
                     <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                         <div class="text-4xl font-bold mb-2">{{ stats.total_permits }}</div>
                         <div class="text-blue-100">Government Permits</div>
                     </div>
                     <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                        <div class="text-4xl font-bold mb-2">{{ stats.total_jurisdictions }}</div>
-                        <div class="text-blue-100">Jurisdictions</div>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                         <div class="text-4xl font-bold mb-2">{{ stats.total_agencies }}</div>
                         <div class="text-blue-100">Government Agencies</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                        <div class="text-4xl font-bold mb-2">{{ stats.online_permits }}</div>
+                        <div class="text-blue-100">✅ Online Access</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                        <div class="text-4xl font-bold mb-2">{{ stats.api_permits }}</div>
+                        <div class="text-blue-100">🔌 API Available</div>
                     </div>
                 </div>
             </div>
@@ -190,9 +194,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for permit in recent_permits %}
-                <a href="/{{ permit.jurisdiction_slug }}/{{ permit.url_slug }}" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-blue-500 transition">
+                <a href="/{{ permit.url_slug }}" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-blue-500 transition">
                     <div class="flex items-start justify-between mb-3">
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">{{ permit.jurisdiction }}</span>
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">{{ permit.location_applicability }}</span>
                         {% if permit.online_available == 'Yes' %}
                         <span class="inline-flex items-center text-xs text-green-600">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -203,7 +207,7 @@
                         {% endif %}
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">{{ permit.request_type }}</h3>
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ permit.description }}</p>
+                    <p class="text-gray-600 text-sm mb-4">{{ permit.agency_short }}</p>
                     <div class="flex items-center justify-between text-sm">
                         <div class="flex items-center text-gray-600">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,7 +219,7 @@
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            {{ permit.processing_time }}
+                            {{ permit.effort_hours }}
                         </div>
                     </div>
                 </a>

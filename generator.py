@@ -16,10 +16,12 @@ Usage:
 """
 
 import os
+import json
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 import sys
+import re
 
 
 class SiteGenerator:
@@ -47,6 +49,55 @@ class SiteGenerator:
             'errors': 0,
             'start_time': datetime.now()
         }
+
+    def slugify(self, text):
+        """
+        Convert text to URL-safe slug
+
+        Args:
+            text: Text to slugify
+
+        Returns:
+            URL-safe slug
+        """
+        # Convert to lowercase
+        text = text.lower()
+        # Remove special characters and replace spaces with hyphens
+        text = re.sub(r'[^\w\s-]', '', text)
+        text = re.sub(r'[\s_]+', '-', text)
+        text = re.sub(r'^-+|-+$', '', text)
+        return text
+
+    def generate_url_slug(self, agency_short, request_type):
+        """
+        Generate URL slug from agency and request type
+
+        Args:
+            agency_short: Short agency name
+            request_type: Type of permit/transaction
+
+        Returns:
+            URL slug (e.g., "california-food-truck-permit")
+        """
+        # Extract state/jurisdiction from agency name (e.g., "CA" -> "california")
+        state_abbrev = agency_short.split()[0] if agency_short else ""
+
+        # Map common state abbreviations to full names
+        state_map = {
+            'CA': 'california',
+            'NY': 'new-york',
+            'TX': 'texas',
+            'FL': 'florida',
+            # Add more as needed
+        }
+
+        state_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+
+        # Slugify request type
+        request_slug = self.slugify(request_type)
+
+        # Combine: state-request-type
+        return f"{state_slug}-{request_slug}"
 
     def load_data(self, csv_file):
         """
@@ -100,43 +151,115 @@ class SiteGenerator:
 
         except Exception as e:
             print(f"✗ Error generating page: {e}")
+            import traceback
+            traceback.print_exc()
             self.stats['errors'] += 1
 
-    def generate_transaction_pages(self):
-        """Generate all transaction pages from CSV data"""
-        print("\n🚀 Starting page generation...\n")
+    def generate_transaction_pages(self, df):
+        """
+        Generate all transaction pages from CSV data
 
-        # Load CSV data
-        df = self.load_data('sample.csv')
+        Args:
+            df: DataFrame with permit data
+        """
+        print("\n📄 Generating transaction pages...\n")
 
         # Generate a page for each row in the CSV
         for idx, row in df.iterrows():
             # Convert row to dictionary
             data = row.to_dict()
 
-            # Build output path based on jurisdiction and URL slug
-            # Format: /output/{jurisdiction}/{url_slug}/index.html
-            jurisdiction_slug = data['jurisdiction'].lower().replace(' ', '-')
+            # Generate URL slug
+            url_slug = self.generate_url_slug(data['agency_short'], data['request_type'])
+            data['url_slug'] = url_slug
+
+            # Add jurisdiction_slug for breadcrumb navigation
+            state_abbrev = data['agency_short'].split()[0] if data['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            data['jurisdiction_slug'] = state_map.get(state_abbrev, self.slugify(state_abbrev))
+
+            # Build output path
             output_path = os.path.join(
                 self.output_dir,
-                jurisdiction_slug,
-                f"{data['url_slug']}.html"
+                f"{url_slug}.html"
             )
 
             # Generate the page
             self.generate_page('transaction_page.html', data, output_path)
 
-        print(f"\n✓ Generated {self.stats['pages_generated']} page(s)")
+    def generate_homepage(self, df):
+        """
+        Generate the homepage (index.html) with agency and permit listings
 
-    def generate_sitemap(self):
-        """Generate sitemap.xml with all page URLs"""
+        Args:
+            df: DataFrame with permit data
+        """
+        print("\n🏠 Generating homepage...")
+
+        # Calculate statistics
+        stats = {
+            'total_permits': len(df),
+            'total_agencies': df['agency_full'].nunique(),
+            'online_permits': len(df[df['online_available'] == 'Yes']),
+            'api_permits': len(df[df['api_available'] == 'Yes'])
+        }
+
+        # Get list of agencies with permit counts
+        agency_counts = df.groupby('agency_short').size().reset_index(name='permit_count')
+        jurisdictions = []
+        for _, row in agency_counts.iterrows():
+            # Generate slug for agency
+            agency_slug = self.slugify(row['agency_short'])
+            jurisdictions.append({
+                'name': row['agency_short'],
+                'slug': agency_slug,
+                'permit_count': row['permit_count']
+            })
+
+        # Sort agencies alphabetically
+        jurisdictions = sorted(jurisdictions, key=lambda x: x['name'])
+
+        # Get recent/featured permits (all permits for now)
+        recent_permits = []
+        for _, row in df.iterrows():
+            url_slug = self.generate_url_slug(row['agency_short'], row['request_type'])
+            recent_permits.append({
+                'agency_short': row['agency_short'],
+                'request_type': row['request_type'],
+                'cost': row['cost'],
+                'effort_hours': row['effort_hours'],
+                'online_available': row['online_available'],
+                'url_slug': url_slug,
+                'location_applicability': row['location_applicability']
+            })
+
+        # Prepare template data
+        template_data = {
+            'stats': stats,
+            'jurisdictions': jurisdictions,
+            'recent_permits': recent_permits
+        }
+
+        # Generate homepage
+        output_path = os.path.join(self.output_dir, 'index.html')
+        self.generate_page('index.html', template_data, output_path)
+
+    def generate_sitemap(self, df):
+        """
+        Generate sitemap.xml with all page URLs and lastmod dates
+
+        Args:
+            df: DataFrame with permit data
+        """
         print("\n🗺️  Generating sitemap.xml...")
 
         # Base URL for the site
         base_url = "https://permitindex.com"
-
-        # Load data to get all URLs
-        df = self.load_data('sample.csv')
 
         # Build sitemap XML
         sitemap_content = ['<?xml version="1.0" encoding="UTF-8"?>']
@@ -145,17 +268,19 @@ class SiteGenerator:
         # Add homepage
         sitemap_content.append('  <url>')
         sitemap_content.append(f'    <loc>{base_url}/</loc>')
+        sitemap_content.append(f'    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>')
         sitemap_content.append('    <changefreq>daily</changefreq>')
         sitemap_content.append('    <priority>1.0</priority>')
         sitemap_content.append('  </url>')
 
         # Add transaction pages
         for idx, row in df.iterrows():
-            jurisdiction_slug = row['jurisdiction'].lower().replace(' ', '-')
-            url = f"{base_url}/{jurisdiction_slug}/{row['url_slug']}"
+            url_slug = self.generate_url_slug(row['agency_short'], row['request_type'])
+            url = f"{base_url}/{url_slug}"
 
             sitemap_content.append('  <url>')
             sitemap_content.append(f'    <loc>{url}</loc>')
+            sitemap_content.append(f'    <lastmod>{row["date_extracted"]}</lastmod>')
             sitemap_content.append('    <changefreq>weekly</changefreq>')
             sitemap_content.append('    <priority>0.8</priority>')
             sitemap_content.append('  </url>')
@@ -169,57 +294,39 @@ class SiteGenerator:
 
         print(f"✓ Sitemap generated: {sitemap_path}")
 
-    def generate_homepage(self):
-        """Generate the homepage (index.html) with jurisdiction and permit listings"""
-        print("\n🏠 Generating homepage...")
+    def generate_data_json(self, df):
+        """
+        Generate data.json for future search/filter features
 
-        # Load CSV data
-        df = self.load_data('sample.csv')
+        Args:
+            df: DataFrame with permit data
+        """
+        print("\n📊 Generating data.json...")
 
-        # Calculate statistics
-        stats = {
-            'total_permits': len(df),
-            'total_jurisdictions': df['jurisdiction'].nunique(),
-            'total_agencies': df['agency'].nunique()
-        }
-
-        # Get list of jurisdictions with permit counts
-        jurisdiction_counts = df.groupby('jurisdiction').size().reset_index(name='permit_count')
-        jurisdictions = []
-        for _, row in jurisdiction_counts.iterrows():
-            jurisdictions.append({
-                'name': row['jurisdiction'],
-                'slug': row['jurisdiction'].lower().replace(' ', '-'),
-                'permit_count': row['permit_count']
-            })
-
-        # Sort jurisdictions alphabetically
-        jurisdictions = sorted(jurisdictions, key=lambda x: x['name'])
-
-        # Get recent/featured permits (all permits for now)
-        recent_permits = []
+        # Convert DataFrame to list of dicts with URL slugs
+        permits_data = []
         for _, row in df.iterrows():
-            recent_permits.append({
-                'jurisdiction': row['jurisdiction'],
-                'jurisdiction_slug': row['jurisdiction'].lower().replace(' ', '-'),
-                'request_type': row['request_type'],
-                'description': row['description'],
-                'cost': row['cost'],
-                'processing_time': row['processing_time'],
-                'online_available': row['online_available'],
-                'url_slug': row['url_slug']
-            })
+            permit = row.to_dict()
+            # Add generated URL slug
+            permit['url_slug'] = self.generate_url_slug(row['agency_short'], row['request_type'])
+            # Remove source_url (internal only)
+            if 'source_url' in permit:
+                del permit['source_url']
+            permits_data.append(permit)
 
-        # Prepare template data
-        template_data = {
-            'stats': stats,
-            'jurisdictions': jurisdictions,
-            'recent_permits': recent_permits
+        # Create data structure
+        data = {
+            'generated_at': datetime.now().isoformat(),
+            'total_permits': len(permits_data),
+            'permits': permits_data
         }
 
-        # Generate homepage
-        output_path = os.path.join(self.output_dir, 'index.html')
-        self.generate_page('index.html', template_data, output_path)
+        # Write JSON file
+        json_path = os.path.join(self.output_dir, 'data.json')
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+
+        print(f"✓ Data JSON generated: {json_path}")
 
     def generate_robots_txt(self):
         """Generate robots.txt with sitemap location"""
@@ -263,14 +370,20 @@ class SiteGenerator:
         print("🏛️  PERMITINDEX STATIC SITE GENERATOR")
         print("=" * 60)
 
+        # Load data once
+        df = self.load_data('permits.csv')
+
         # Generate homepage
-        self.generate_homepage()
+        self.generate_homepage(df)
 
         # Generate transaction pages
-        self.generate_transaction_pages()
+        self.generate_transaction_pages(df)
 
         # Generate sitemap
-        self.generate_sitemap()
+        self.generate_sitemap(df)
+
+        # Generate data.json
+        self.generate_data_json(df)
 
         # Generate robots.txt
         self.generate_robots_txt()
