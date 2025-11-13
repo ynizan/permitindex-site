@@ -4,7 +4,18 @@
       "Bash(mkdir:*)",
       "Bash(pip install:*)",
       "Bash(pip3 install:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(ssh-keyscan:*)",
+      "Bash(~/.ssh/known_hosts)",
+      "Bash(ssh-keygen:*)",
+      "Bash(cat:*)",
+      "Bash(ssh-add:*)",
+      "Bash(ssh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

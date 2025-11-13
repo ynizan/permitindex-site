@@ -169,11 +169,19 @@ class SiteGenerator:
             # Convert row to dictionary
             data = row.to_dict()
 
-            # Generate URL slug
-            url_slug = self.generate_url_slug(data['agency_short'], data['request_type'])
-            data['url_slug'] = url_slug
+            # Parse JSON fields
+            json_fields = ['community_feedback', 'user_tips', 'faqs']
+            for field in json_fields:
+                if field in data and isinstance(data[field], str) and data[field]:
+                    try:
+                        data[field] = json.loads(data[field])
+                    except json.JSONDecodeError:
+                        print(f"⚠️  Warning: Could not parse JSON for {field}")
+                        data[field] = []
+                else:
+                    data[field] = []
 
-            # Add jurisdiction_slug for breadcrumb navigation
+            # Extract jurisdiction slug
             state_abbrev = data['agency_short'].split()[0] if data['agency_short'] else ""
             state_map = {
                 'CA': 'california',
@@ -181,16 +189,111 @@ class SiteGenerator:
                 'TX': 'texas',
                 'FL': 'florida',
             }
-            data['jurisdiction_slug'] = state_map.get(state_abbrev, self.slugify(state_abbrev))
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+            data['jurisdiction_slug'] = jurisdiction_slug
 
-            # Build output path
+            # Generate clean permit slug (just the permit name, not state-permit)
+            permit_slug = self.slugify(data['request_type'])
+            data['permit_slug'] = permit_slug
+
+            # Full URL slug for compatibility (jurisdiction-permit)
+            data['url_slug'] = f"{jurisdiction_slug}-{permit_slug}"
+
+            # Build output path: /output/{jurisdiction}/{permit-slug}/index.html
+            # This creates clean URLs like /california/food-truck-permit/
             output_path = os.path.join(
                 self.output_dir,
-                f"{url_slug}.html"
+                jurisdiction_slug,
+                permit_slug,
+                'index.html'
             )
 
             # Generate the page
             self.generate_page('transaction_page.html', data, output_path)
+
+    def generate_jurisdiction_hubs(self, df):
+        """
+        Generate hub pages for each jurisdiction
+
+        Args:
+            df: DataFrame with permit data
+        """
+        print("\n🌎 Generating jurisdiction hub pages...\n")
+
+        # Group permits by jurisdiction
+        jurisdictions = {}
+        for _, row in df.iterrows():
+            state_abbrev = row['agency_short'].split()[0] if row['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+
+            if jurisdiction_slug not in jurisdictions:
+                jurisdictions[jurisdiction_slug] = {
+                    'name': row['agency_short'],
+                    'permits': []
+                }
+
+            permit_slug = self.slugify(row['request_type'])
+            jurisdictions[jurisdiction_slug]['permits'].append({
+                'request_type': row['request_type'],
+                'agency_full': row['agency_full'],
+                'description': row['description'] if 'description' in row else '',
+                'cost': row['cost'],
+                'processing_time': row['processing_time'] if 'processing_time' in row else row.get('effort_hours', ''),
+                'online_available': row['online_available'],
+                'api_available': row['api_available'],
+                'mcp_available': row.get('mcp_available', 'No'),
+                'permit_slug': permit_slug,
+                'estimated_monthly_volume': row.get('estimated_monthly_volume', '0')
+            })
+
+        # Generate a hub page for each jurisdiction
+        for jurisdiction_slug, data in jurisdictions.items():
+            # Calculate statistics
+            total_permits = len(data['permits'])
+            online_permits = len([p for p in data['permits'] if p['online_available'] == 'Yes'])
+            api_permits = len([p for p in data['permits'] if p['api_available'] == 'Yes'])
+            mcp_permits = len([p for p in data['permits'] if p['mcp_available'] == 'Yes'])
+
+            # Sort permits by monthly volume (most popular first)
+            # Handle non-numeric values like '800-1200' by taking the first number
+            def get_volume(permit):
+                vol = permit.get('estimated_monthly_volume', '0')
+                # Extract first number from string like '800-1200' -> 800
+                import re
+                match = re.search(r'\d+', str(vol))
+                return int(match.group()) if match else 0
+
+            sorted_permits = sorted(data['permits'], key=get_volume, reverse=True)
+
+            # Get top 6 popular permits
+            popular_permits = sorted_permits[:6]
+
+            # Prepare template data
+            template_data = {
+                'jurisdiction_name': data['name'],
+                'jurisdiction_slug': jurisdiction_slug,
+                'total_permits': total_permits,
+                'online_permits': online_permits,
+                'api_permits': api_permits,
+                'mcp_permits': mcp_permits,
+                'popular_permits': popular_permits,
+                'all_permits': sorted_permits
+            }
+
+            # Generate hub page at /output/{jurisdiction}/index.html
+            output_path = os.path.join(
+                self.output_dir,
+                jurisdiction_slug,
+                'index.html'
+            )
+
+            self.generate_page('jurisdiction_hub.html', template_data, output_path)
 
     def generate_homepage(self, df):
         """
@@ -227,14 +330,25 @@ class SiteGenerator:
         # Get recent/featured permits (all permits for now)
         recent_permits = []
         for _, row in df.iterrows():
-            url_slug = self.generate_url_slug(row['agency_short'], row['request_type'])
+            state_abbrev = row['agency_short'].split()[0] if row['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+            permit_slug = self.slugify(row['request_type'])
+
             recent_permits.append({
                 'agency_short': row['agency_short'],
                 'request_type': row['request_type'],
                 'cost': row['cost'],
                 'effort_hours': row['effort_hours'],
                 'online_available': row['online_available'],
-                'url_slug': url_slug,
+                'url_slug': f"/{jurisdiction_slug}/{permit_slug}/",
+                'jurisdiction_slug': jurisdiction_slug,
+                'permit_slug': permit_slug,
                 'location_applicability': row['location_applicability']
             })
 
@@ -273,10 +387,45 @@ class SiteGenerator:
         sitemap_content.append('    <priority>1.0</priority>')
         sitemap_content.append('  </url>')
 
-        # Add transaction pages
+        # Add jurisdiction hub pages
+        jurisdictions = df.groupby('agency_short').first().reset_index()
+        jurisdiction_slugs_added = set()
+
+        for _, row in jurisdictions.iterrows():
+            state_abbrev = row['agency_short'].split()[0] if row['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+
+            if jurisdiction_slug not in jurisdiction_slugs_added:
+                jurisdiction_slugs_added.add(jurisdiction_slug)
+                url = f"{base_url}/{jurisdiction_slug}/"
+
+                sitemap_content.append('  <url>')
+                sitemap_content.append(f'    <loc>{url}</loc>')
+                sitemap_content.append(f'    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>')
+                sitemap_content.append('    <changefreq>weekly</changefreq>')
+                sitemap_content.append('    <priority>0.9</priority>')
+                sitemap_content.append('  </url>')
+
+        # Add transaction pages with hierarchical URLs
         for idx, row in df.iterrows():
-            url_slug = self.generate_url_slug(row['agency_short'], row['request_type'])
-            url = f"{base_url}/{url_slug}"
+            state_abbrev = row['agency_short'].split()[0] if row['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+            permit_slug = self.slugify(row['request_type'])
+
+            # Use hierarchical URL: /jurisdiction/permit-slug/
+            url = f"{base_url}/{jurisdiction_slug}/{permit_slug}/"
 
             sitemap_content.append('  <url>')
             sitemap_content.append(f'    <loc>{url}</loc>')
@@ -307,8 +456,23 @@ class SiteGenerator:
         permits_data = []
         for _, row in df.iterrows():
             permit = row.to_dict()
-            # Add generated URL slug
-            permit['url_slug'] = self.generate_url_slug(row['agency_short'], row['request_type'])
+
+            # Generate hierarchical URL
+            state_abbrev = row['agency_short'].split()[0] if row['agency_short'] else ""
+            state_map = {
+                'CA': 'california',
+                'NY': 'new-york',
+                'TX': 'texas',
+                'FL': 'florida',
+            }
+            jurisdiction_slug = state_map.get(state_abbrev, self.slugify(state_abbrev))
+            permit_slug = self.slugify(row['request_type'])
+
+            # Add generated URL slug (hierarchical format)
+            permit['url_slug'] = f"/{jurisdiction_slug}/{permit_slug}/"
+            permit['jurisdiction_slug'] = jurisdiction_slug
+            permit['permit_slug'] = permit_slug
+
             # Remove source_url (internal only)
             if 'source_url' in permit:
                 del permit['source_url']
@@ -375,6 +539,9 @@ class SiteGenerator:
 
         # Generate homepage
         self.generate_homepage(df)
+
+        # Generate jurisdiction hub pages
+        self.generate_jurisdiction_hubs(df)
 
         # Generate transaction pages
         self.generate_transaction_pages(df)
