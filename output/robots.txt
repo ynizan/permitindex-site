@@ -1,0 +1,8 @@
+# PermitIndex robots.txt
+# Allow all crawlers
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://permitindex.com/sitemap.xml

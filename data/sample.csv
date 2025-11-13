@@ -1,0 +1,2 @@
+jurisdiction,agency,request_type,description,cost,processing_time,renewal_frequency,online_available,api_available,requirements,url_slug
+California,Department of Public Health,Food Truck Operating Permit,Annual permit required for mobile food facilities operating in California,$500-800,4-6 weeks,Annual,Yes,No,"Business license, Vehicle inspection, Food handler certification, Insurance",california-food-truck-permit

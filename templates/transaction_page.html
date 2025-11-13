@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>{{ request_type }} - {{ jurisdiction }} | PermitIndex</title>
+    <meta name="title" content="{{ request_type }} - {{ jurisdiction }} | PermitIndex">
+    <meta name="description" content="{{ description }} Cost: {{ cost }}, Processing time: {{ processing_time }}. Complete guide and requirements.">
+    <meta name="keywords" content="{{ request_type }}, {{ jurisdiction }}, permit, government transaction, {{ agency }}">
+    <meta name="author" content="PermitIndex">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://permitindex.com/{{ jurisdiction|lower }}/{{ url_slug }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://permitindex.com/{{ jurisdiction|lower }}/{{ url_slug }}">
+    <meta property="og:title" content="{{ request_type }} - {{ jurisdiction }} | PermitIndex">
+    <meta property="og:description" content="{{ description }} Cost: {{ cost }}, Processing time: {{ processing_time }}.">
+    <meta property="og:site_name" content="PermitIndex">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://permitindex.com/{{ jurisdiction|lower }}/{{ url_slug }}">
+    <meta name="twitter:title" content="{{ request_type }} - {{ jurisdiction }} | PermitIndex">
+    <meta name="twitter:description" content="{{ description }} Cost: {{ cost }}, Processing time: {{ processing_time }}.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- JSON-LD Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://permitindex.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "{{ jurisdiction }}",
+          "item": "https://permitindex.com/{{ jurisdiction|lower }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ request_type }}",
+          "item": "https://permitindex.com/{{ jurisdiction|lower }}/{{ url_slug }}"
+        }
+      ]
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: GovernmentService -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GovernmentService",
+      "name": "{{ request_type }}",
+      "description": "{{ description }}",
+      "provider": {
+        "@type": "GovernmentOrganization",
+        "name": "{{ agency }}",
+        "areaServed": {
+          "@type": "State",
+          "name": "{{ jurisdiction }}"
+        }
+      },
+      "serviceType": "{{ request_type }}",
+      "areaServed": {
+        "@type": "State",
+        "name": "{{ jurisdiction }}"
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://permitindex.com/{{ jurisdiction|lower }}/{{ url_slug }}",
+        "availableLanguage": "en"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "{{ request_type }}",
+      "provider": {
+        "@type": "Organization",
+        "name": "PermitIndex",
+        "url": "https://permitindex.com"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "{{ jurisdiction }}"
+      },
+      "description": "{{ description }}"
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data: HowTo -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Apply for {{ request_type }} in {{ jurisdiction }}",
+      "description": "{{ description }}",
+      "totalTime": "{{ processing_time }}",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "{{ cost }}"
+      },
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Review Requirements",
+          "text": "Ensure you have all required documents: {{ requirements }}"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Submit Application",
+          "text": "Submit your application{% if online_available == 'Yes' %} online or in person{% else %} in person{% endif %}"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Wait for Processing",
+          "text": "Application processing typically takes {{ processing_time }}"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Receive Permit",
+          "text": "Once approved, you will receive your {{ request_type }}"
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">PermitIndex</a>
+                    <p class="text-sm text-gray-600">Complete Database of US Government Transactions</p>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="bg-gray-100 border-b border-gray-200" aria-label="Breadcrumb">
+        <div class="container mx-auto px-4 py-3">
+            <ol class="flex items-center space-x-2 text-sm">
+                <li>
+                    <a href="/" class="text-blue-600 hover:text-blue-700">Home</a>
+                </li>
+                <li class="text-gray-500">/</li>
+                <li>
+                    <a href="/{{ jurisdiction|lower }}" class="text-blue-600 hover:text-blue-700">{{ jurisdiction }}</a>
+                </li>
+                <li class="text-gray-500">/</li>
+                <li class="text-gray-700 font-medium" aria-current="page">{{ request_type }}</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content Area -->
+            <article class="lg:col-span-2">
+                <!-- Transaction Title -->
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ request_type }}</h1>
+
+                <div class="flex items-center space-x-4 mb-6 text-sm text-gray-600">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        {{ jurisdiction }}
+                    </span>
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        {{ agency }}
+                    </span>
+                </div>
+
+                <!-- Key Information Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Cost</div>
+                        <div class="text-2xl font-bold text-blue-600">{{ cost }}</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Processing Time</div>
+                        <div class="text-2xl font-bold text-blue-600">{{ processing_time }}</div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6 border border-gray-200">
+                        <div class="text-sm text-gray-600 mb-1">Renewal</div>
+                        <div class="text-2xl font-bold text-blue-600">{{ renewal_frequency }}</div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+                    <p class="text-gray-700 leading-relaxed">{{ description }}</p>
+                </section>
+
+                <!-- Requirements -->
+                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Requirements</h2>
+                    <ul class="space-y-3">
+                        {% for requirement in requirements.split(', ') %}
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-gray-700">{{ requirement }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- How to Apply -->
+                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">How to Apply</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">1</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-1">Review Requirements</h3>
+                                <p class="text-gray-700">Ensure you have all required documents and meet eligibility criteria.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">2</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-1">Submit Application</h3>
+                                <p class="text-gray-700">Complete and submit your application {% if online_available == 'Yes' %}online or in person{% else %}in person{% endif %} to {{ agency }}.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">3</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-1">Wait for Processing</h3>
+                                <p class="text-gray-700">Application processing typically takes {{ processing_time }}.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">4</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-1">Receive Your Permit</h3>
+                                <p class="text-gray-700">Once approved, you will receive your {{ request_type }}.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if online_available == 'Yes' %}
+                    <div class="mt-6">
+                        <a href="#" class="inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+                            Apply Online
+                        </a>
+                    </div>
+                    {% endif %}
+                </section>
+
+                <!-- Related Permits -->
+                <section class="bg-white rounded-lg shadow p-6 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Related Permits & Licenses</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="/california/business-license" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition">
+                            <h3 class="font-semibold text-gray-900 mb-1">Business License</h3>
+                            <p class="text-sm text-gray-600">Required to operate a business in California</p>
+                        </a>
+                        <a href="/california/health-permit" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition">
+                            <h3 class="font-semibold text-gray-900 mb-1">Health Permit</h3>
+                            <p class="text-sm text-gray-600">Food service establishment permit</p>
+                        </a>
+                        <a href="/california/vehicle-registration" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition">
+                            <h3 class="font-semibold text-gray-900 mb-1">Commercial Vehicle Registration</h3>
+                            <p class="text-sm text-gray-600">Register your commercial vehicle</p>
+                        </a>
+                        <a href="/california/sellers-permit" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition">
+                            <h3 class="font-semibold text-gray-900 mb-1">Seller's Permit</h3>
+                            <p class="text-sm text-gray-600">Required for retail sales in California</p>
+                        </a>
+                    </div>
+                </section>
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="lg:col-span-1">
+                <!-- Quick Facts Box -->
+                <div class="bg-white rounded-lg shadow p-6 mb-6 border border-gray-200 sticky top-4">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Facts</h2>
+                    <dl class="space-y-4">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Jurisdiction</dt>
+                            <dd class="text-gray-900 font-semibold">{{ jurisdiction }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Issuing Agency</dt>
+                            <dd class="text-gray-900 font-semibold">{{ agency }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Cost</dt>
+                            <dd class="text-gray-900 font-semibold">{{ cost }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Processing Time</dt>
+                            <dd class="text-gray-900 font-semibold">{{ processing_time }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-600">Renewal</dt>
+                            <dd class="text-gray-900 font-semibold">{{ renewal_frequency }}</dd>
+                        </div>
+                    </dl>
+
+                    <!-- Status Indicators -->
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <h3 class="text-sm font-medium text-gray-600 mb-3">Availability</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">Online Application</span>
+                                {% if online_available == 'Yes' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Available
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Not Available
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">API Access</span>
+                                {% if api_available == 'Yes' %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Available
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Not Available
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">PermitIndex</h3>
+                    <p class="text-sm">Complete Database of US Government Transactions</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/about" class="hover:text-white">About</a></li>
+                        <li><a href="/contact" class="hover:text-white">Contact</a></li>
+                        <li><a href="/privacy" class="hover:text-white">Privacy Policy</a></li>
+                        <li><a href="/terms" class="hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/states" class="hover:text-white">Browse by State</a></li>
+                        <li><a href="/agencies" class="hover:text-white">Browse by Agency</a></li>
+                        <li><a href="/faq" class="hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-white" aria-label="Twitter">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-white" aria-label="LinkedIn">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-white" aria-label="Facebook">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2024 PermitIndex. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
