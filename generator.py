@@ -169,6 +169,58 @@ class SiteGenerator:
 
         print(f"✓ Sitemap generated: {sitemap_path}")
 
+    def generate_homepage(self):
+        """Generate the homepage (index.html) with jurisdiction and permit listings"""
+        print("\n🏠 Generating homepage...")
+
+        # Load CSV data
+        df = self.load_data('sample.csv')
+
+        # Calculate statistics
+        stats = {
+            'total_permits': len(df),
+            'total_jurisdictions': df['jurisdiction'].nunique(),
+            'total_agencies': df['agency'].nunique()
+        }
+
+        # Get list of jurisdictions with permit counts
+        jurisdiction_counts = df.groupby('jurisdiction').size().reset_index(name='permit_count')
+        jurisdictions = []
+        for _, row in jurisdiction_counts.iterrows():
+            jurisdictions.append({
+                'name': row['jurisdiction'],
+                'slug': row['jurisdiction'].lower().replace(' ', '-'),
+                'permit_count': row['permit_count']
+            })
+
+        # Sort jurisdictions alphabetically
+        jurisdictions = sorted(jurisdictions, key=lambda x: x['name'])
+
+        # Get recent/featured permits (all permits for now)
+        recent_permits = []
+        for _, row in df.iterrows():
+            recent_permits.append({
+                'jurisdiction': row['jurisdiction'],
+                'jurisdiction_slug': row['jurisdiction'].lower().replace(' ', '-'),
+                'request_type': row['request_type'],
+                'description': row['description'],
+                'cost': row['cost'],
+                'processing_time': row['processing_time'],
+                'online_available': row['online_available'],
+                'url_slug': row['url_slug']
+            })
+
+        # Prepare template data
+        template_data = {
+            'stats': stats,
+            'jurisdictions': jurisdictions,
+            'recent_permits': recent_permits
+        }
+
+        # Generate homepage
+        output_path = os.path.join(self.output_dir, 'index.html')
+        self.generate_page('index.html', template_data, output_path)
+
     def generate_robots_txt(self):
         """Generate robots.txt with sitemap location"""
         print("\n🤖 Generating robots.txt...")
@@ -210,6 +262,9 @@ class SiteGenerator:
         print("\n" + "=" * 60)
         print("🏛️  PERMITINDEX STATIC SITE GENERATOR")
         print("=" * 60)
+
+        # Generate homepage
+        self.generate_homepage()
 
         # Generate transaction pages
         self.generate_transaction_pages()
