@@ -61,6 +61,35 @@
 - **Minimum size:** 16px width
 - **Formats:** SVG, PNG (16x16, 32x32, 64x64, 512x512)
 
+### Favicon Implementation
+
+**Design features:**
+- Single letter "P" in Arial Black
+- Star cutout using SVG mask technique
+- Navy blue color (#003366)
+- Clean, minimal design optimized for all sizes
+
+**Technical implementation:**
+- Source file: `static/favicon/icon.svg`
+- Uses SVG `<mask>` element for star cutout
+- Text element masked to create the effect
+- Generates to PNG for broader browser support
+
+**File structure:**
+```
+static/favicon/
+├── icon.svg                    (source)
+├── favicon.ico                 (multi-resolution)
+├── favicon-16x16.png
+├── favicon-32x32.png
+├── favicon-64x64.png
+├── apple-touch-icon.png        (180x180)
+├── android-chrome-192x192.png
+├── android-chrome-512x512.png
+├── site.webmanifest
+└── browserconfig.xml
+```
+
 ### Logo Colors
 
 **Primary Logo Colors:**

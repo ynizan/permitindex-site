@@ -1,7 +1,7 @@
 {
     "name": "PermitIndex",
     "short_name": "PermitIndex",
-    "description": "Complete Database of US Government Permits and Licenses",
+    "description": "Comprehensive database of US government transactions",
     "icons": [
         {
             "src": "/favicon/android-chrome-192x192.png",
