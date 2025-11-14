@@ -63,6 +63,8 @@
         .star-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); }
         .star-button::before { content: ''; position: absolute; top: -5px; right: 12px; width: 12px; height: 12px; background: var(--bg-light); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
         .star-button.secondary { background: var(--primary); }
+        .star-box.primary .star-button::before { background: var(--primary); }
+        .star-box.primary .star-button.outline::before { background: white; }
         .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-medium); font-size: 13px; font-weight: 600; position: relative; }
         .status-badge::before { content: ''; position: absolute; top: -5px; right: 12px; width: 12px; height: 12px; background: var(--bg-light); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
         .status-badge.online { background: var(--success); color: white; }

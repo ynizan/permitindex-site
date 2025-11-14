@@ -161,6 +161,15 @@
             top: -6px;
         }
 
+        /* Buttons inside colored containers need star to match container background */
+        .star-box.primary .star-button::before {
+            background: var(--primary);
+        }
+
+        .star-box.primary .star-button.outline::before {
+            background: white;
+        }
+
         /* Status badges */
         .status-badge {
             display: inline-flex;
