@@ -1,35 +1,10 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <!-- Star cutout mask -->
-    <clipPath id="star-cutout">
-      <polygon points="
-        0,0 100,0 100,100 0,100 0,0
-        92,8 92.5,9.4 94,9.4 92.8,10.3 93.3,11.7 92,10.8 90.7,11.7 91.2,10.3 90,9.4 91.5,9.4
-      " fill-rule="evenodd"/>
-    </clipPath>
-  </defs>
-
-  <!-- Background with star cutout -->
-  <rect width="100" height="100" fill="#003366" clip-path="url(#star-cutout)" rx="16"/>
-
-  <!-- Letter P -->
-  <g fill="#FFFFFF">
-    <path d="
-      M 25,25
-      L 25,75
-      L 35,75
-      L 35,52
-      L 50,52
-      C 63,52 65,50 65,42
-      C 65,34 63,25 50,25
-      Z
-
-      M 35,35
-      L 50,35
-      C 55,35 55,35 55,42
-      C 55,49 55,49 50,49
-      L 35,49
-      Z
-    " />
-  </g>
+<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PermitIndex Icon">
+    <title>PermitIndex Icon</title>
+    <defs>
+        <mask id="p-icon-mask">
+            <rect width="100%" height="100%" fill="white"/>
+            <polygon points="20,2 21.5,6 25.5,6 22.2,8.5 23.5,12.5 20,9.8 16.5,12.5 17.8,8.5 14.5,6 18.5,6" fill="black"/>
+        </mask>
+    </defs>
+    <text x="0" y="32" font-size="36" font-family="Arial Black, sans-serif" font-weight="900" fill="#003366" letter-spacing="-1" mask="url(#p-icon-mask)">P</text>
 </svg>
