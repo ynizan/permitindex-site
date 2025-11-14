@@ -10,6 +10,25 @@ Directory Structure:
 - /data: CSV data files
 - /output: Generated HTML pages
 - /static: Static assets (CSS, JS, images)
+- /docs: Brand guidelines and documentation
+
+Brand Guidelines:
+All generated HTML must follow the PermitIndex brand color system.
+See the following files for details:
+- /docs/BRAND_GUIDELINES.md - Official brand guidelines
+- /static/css/variables.css - CSS color variables
+- /DEVELOPER.md - Developer guide for using brand colors
+
+Color System:
+- Primary Blue (#003366): Headers, links, primary buttons
+- Accent Orange (#FF6B35): CTAs only (use sparingly!)
+- Text Dark (#1a1a1a): Body text
+- Text Light (#666666): Secondary text
+- Backgrounds: #FFFFFF (cards), #F8F9FA (page)
+- Borders: #E0E0E0
+
+⚠️  IMPORTANT: Use CSS variables (var(--primary), var(--accent), etc.)
+   instead of hardcoded colors or Tailwind classes.
 
 Usage:
     python generator.py

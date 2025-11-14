@@ -1,0 +1,221 @@
+/**
+ * PermitIndex Brand Color System
+ * Version: 1.0
+ * Last Updated: November 2024
+ *
+ * This file defines the official PermitIndex color palette as specified in BRAND_GUIDELINES.md
+ * All templates should use these CSS variables instead of hardcoded colors for consistency.
+ *
+ * Reference: /docs/BRAND_GUIDELINES.md
+ * Developer Guide: /DEVELOPER.md
+ */
+
+:root {
+    /* ========================================
+       PRIMARY COLORS
+       ======================================== */
+
+    /**
+     * Primary Blue - #003366
+     * Usage: Logo, headers, primary buttons, links, borders, primary content boxes
+     * Represents: Trust, authority, government, professionalism
+     * Accessibility: AA compliant on white backgrounds
+     */
+    --primary: #003366;
+    --primary-rgb: 0, 51, 102;
+
+    /**
+     * Accent Orange - #FF6B35
+     * Usage: Call-to-action buttons, important highlights, featured content, status badges
+     * Represents: Attention, urgency, action, accessibility
+     * Accessibility: AA compliant on white backgrounds
+     * ⚠️  Use sparingly - for CTAs and highlights only!
+     */
+    --accent: #FF6B35;
+    --accent-rgb: 255, 107, 53;
+
+
+    /* ========================================
+       TEXT COLORS
+       ======================================== */
+
+    /**
+     * Text Dark - #1a1a1a
+     * Usage: Body text, headings, primary content
+     * Provides excellent readability and contrast
+     */
+    --text: #1a1a1a;
+    --text-rgb: 26, 26, 26;
+
+    /**
+     * Text Light - #666666
+     * Usage: Secondary text, meta information, labels, timestamps
+     * Use for less important text that still needs to be readable
+     */
+    --text-light: #666666;
+    --text-light-rgb: 102, 102, 102;
+
+
+    /* ========================================
+       BACKGROUND COLORS
+       ======================================== */
+
+    /**
+     * Background White - #FFFFFF
+     * Usage: Card backgrounds, content boxes, modal backgrounds
+     * Primary background for content containers
+     */
+    --bg: #ffffff;
+    --bg-rgb: 255, 255, 255;
+
+    /**
+     * Background Light - #F8F9FA
+     * Usage: Page backgrounds, subtle separations, alternating rows
+     * Provides subtle contrast with white content boxes
+     */
+    --bg-light: #f8f9fa;
+    --bg-light-rgb: 248, 249, 250;
+
+
+    /* ========================================
+       BORDER COLORS
+       ======================================== */
+
+    /**
+     * Border - #E0E0E0
+     * Usage: Borders, dividers, separators
+     * Subtle enough to not distract, visible enough to separate content
+     */
+    --border: #e0e0e0;
+    --border-rgb: 224, 224, 224;
+
+
+    /* ========================================
+       STATUS COLORS
+       ======================================== */
+
+    /**
+     * Success Green - #10B981
+     * Usage: "Online Available" badges, success messages, completion indicators
+     * Indicates positive status or available online services
+     */
+    --success: #10b981;
+    --success-rgb: 16, 185, 129;
+
+    /**
+     * Warning Yellow - #F59E0B
+     * Usage: Warning messages, caution indicators
+     * Use for important information that requires attention
+     */
+    --warning: #F59E0B;
+    --warning-rgb: 245, 158, 11;
+
+    /**
+     * Error Red - #EF4444
+     * Usage: Error messages, validation failures, critical alerts
+     * Use sparingly to indicate serious issues
+     */
+    --error: #EF4444;
+    --error-rgb: 239, 68, 68;
+
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+
+    /**
+     * Display Font - Arial Black
+     * Usage: Logo, headings (H1-H2), emphasis
+     * Heavy weight = authority, universally available, no loading needed
+     */
+    --font-display: 'Arial Black', 'Helvetica Bold', sans-serif;
+
+    /**
+     * Body Font - System Font Stack
+     * Usage: Body text, paragraphs, UI elements
+     * Fast loading, platform-native appearance
+     */
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+
+    /* ========================================
+       SPACING & SIZING
+       ======================================== */
+
+    /**
+     * Border Radius
+     * Large: 12px - Cards, sections, major containers
+     * Medium: 8px - Buttons, badges, inputs
+     * Small: 6px - Small elements, tags
+     */
+    --radius-large: 12px;
+    --radius-medium: 8px;
+    --radius-small: 6px;
+
+
+    /* ========================================
+       SHADOWS (Elevation System)
+       ======================================== */
+
+    /**
+     * Low Elevation - Subtle shadow for cards
+     * Usage: Content cards, panels
+     */
+    --shadow-low: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    /**
+     * Medium Elevation - Hover states
+     * Usage: Elevated cards on hover, dropdowns
+     */
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    /**
+     * High Elevation - Modals and overlays
+     * Usage: Modal dialogs, popovers, important overlays
+     */
+    --shadow-high: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ========================================
+   DARK MODE (Future Enhancement)
+   ======================================== */
+
+/**
+ * Dark mode color overrides
+ * Currently disabled - to be implemented in future versions
+ *
+ * @media (prefers-color-scheme: dark) {
+ *   :root {
+ *     --text: #f8f9fa;
+ *     --text-light: #b0b0b0;
+ *     --bg: #1a1a1a;
+ *     --bg-light: #2a2a2a;
+ *     --border: #404040;
+ *   }
+ * }
+ */
+
+
+/* ========================================
+   USAGE NOTES
+   ======================================== */
+
+/**
+ * DO's:
+ * ✅ Use variables for all colors: color: var(--primary);
+ * ✅ Use RGB variants for transparency: rgba(var(--primary-rgb), 0.5);
+ * ✅ Reference BRAND_GUIDELINES.md when choosing colors
+ * ✅ Test color contrast for accessibility (WCAG AA minimum)
+ *
+ * DON'Ts:
+ * ❌ Don't use hardcoded hex colors in templates
+ * ❌ Don't create new color variables without updating this file
+ * ❌ Don't use accent orange for large text areas
+ * ❌ Don't use colors at low opacity (fails accessibility)
+ *
+ * For more information, see:
+ * - /docs/BRAND_GUIDELINES.md - Complete brand guidelines
+ * - /DEVELOPER.md - Developer guide for using brand colors
+ * - /docs/IMPLEMENTATION_GUIDE.md - Technical implementation details
+ */

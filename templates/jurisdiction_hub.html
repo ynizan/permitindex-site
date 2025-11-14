@@ -97,9 +97,9 @@
     }
     </script>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body style="background: var(--bg-light); color: var(--text);">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
+    <header style="background: var(--bg); box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border);">
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div>
@@ -119,26 +119,26 @@
                             </g>
                         </svg>
                     </a>
-                    <p class="text-sm text-gray-600">Complete Database of US Government Transactions</p>
+                    <p class="text-sm" style="color: var(--text-light);">Complete Database of US Government Transactions</p>
                 </div>
                 <nav class="hidden md:flex space-x-6">
-                    <a href="/" style="color: var(--text-light);" class="hover:text-blue-600">Home</a>
-                    <a href="/about" style="color: var(--text-light);" class="hover:text-blue-600">About</a>
-                    <a href="/contact" style="color: var(--text-light);" class="hover:text-blue-600">Contact</a>
+                    <a href="/" style="color: var(--text-light);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-light)'">Home</a>
+                    <a href="/about" style="color: var(--text-light);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-light)'">About</a>
+                    <a href="/contact" style="color: var(--text-light);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-light)'">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
     <!-- Breadcrumb Navigation -->
-    <nav class="bg-gray-100 border-b border-gray-200" aria-label="Breadcrumb">
+    <nav style="background: var(--bg-light); border-bottom: 1px solid var(--border);" aria-label="Breadcrumb">
         <div class="container mx-auto px-4 py-3">
             <ol class="flex items-center space-x-2 text-sm">
                 <li>
-                    <a href="/" class="text-blue-600 hover:text-blue-700">Home</a>
+                    <a href="/" style="color: var(--primary);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Home</a>
                 </li>
-                <li class="text-gray-500">/</li>
-                <li class="text-gray-700 font-medium" aria-current="page">{{ jurisdiction_name }}</li>
+                <li style="color: var(--text-light);">/</li>
+                <li class="font-medium" style="color: var(--text);" aria-current="page">{{ jurisdiction_name }}</li>
             </ol>
         </div>
     </nav>
@@ -209,55 +209,55 @@
 
         <!-- All Permits Section -->
         <section class="mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">All {{ jurisdiction_name }} Permits</h2>
-            <div class="bg-white rounded-lg shadow overflow-hidden">
+            <h2 class="text-3xl font-bold mb-6" style="color: var(--text);">All {{ jurisdiction_name }} Permits</h2>
+            <div class="rounded-lg shadow overflow-hidden" style="background: var(--bg);">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full" style="border-top: 1px solid var(--border);">
+                        <thead style="background: var(--bg-light);">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style="color: var(--text-light);">
                                     Permit Name
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style="color: var(--text-light);">
                                     Agency
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style="color: var(--text-light);">
                                     Cost
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style="color: var(--text-light);">
                                     Processing Time
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider" style="color: var(--text-light);">
                                     Status
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody style="background: var(--bg); border-top: 1px solid var(--border);">
                             {% for permit in all_permits %}
-                            <tr class="hover:bg-gray-50">
+                            <tr style="border-top: 1px solid var(--border);" onmouseover="this.style.background='var(--bg-light)'" onmouseout="this.style.background='var(--bg)'">
                                 <td class="px-6 py-4">
-                                    <a href="/{{ jurisdiction_slug }}/{{ permit.permit_slug }}/" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="/{{ jurisdiction_slug }}/{{ permit.permit_slug }}/" class="font-medium" style="color: var(--primary);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                                         {{ permit.request_type }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">
+                                <td class="px-6 py-4 text-sm" style="color: var(--text-light);">
                                     {{ permit.agency_full }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-900 font-semibold">
+                                <td class="px-6 py-4 text-sm font-semibold" style="color: var(--text);">
                                     {{ permit.cost }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">
+                                <td class="px-6 py-4 text-sm" style="color: var(--text-light);">
                                     {{ permit.processing_time }}
                                 </td>
                                 <td class="px-6 py-4 text-sm">
                                     <div class="flex space-x-1">
                                         {% if permit.online_available == 'Yes' %}
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800" title="Online Available">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" style="background: rgba(16,185,129,0.1); color: var(--success);" title="Online Available">
                                             ✅
                                         </span>
                                         {% endif %}
                                         {% if permit.api_available == 'Yes' %}
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800" title="API Available">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" style="background: rgba(0,51,102,0.1); color: var(--primary);" title="API Available">
                                             🔌
                                         </span>
                                         {% endif %}
@@ -272,61 +272,61 @@
         </section>
 
         <!-- FAQ Section -->
-        <section class="bg-white rounded-lg shadow p-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+        <section class="rounded-lg shadow p-8" style="background: var(--bg);">
+            <h2 class="text-3xl font-bold mb-6" style="color: var(--text);">Frequently Asked Questions</h2>
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How do I apply for a {{ jurisdiction_name }} permit?</h3>
-                    <p class="text-gray-700">Most {{ jurisdiction_name }} permits can be applied for online through the respective agency's website. Check the individual permit page for specific instructions and requirements.</p>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text);">How do I apply for a {{ jurisdiction_name }} permit?</h3>
+                    <p style="color: var(--text-light);">Most {{ jurisdiction_name }} permits can be applied for online through the respective agency's website. Check the individual permit page for specific instructions and requirements.</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How long does it take to get a permit in {{ jurisdiction_name }}?</h3>
-                    <p class="text-gray-700">Processing times vary by permit type, ranging from a few days to several weeks. Each permit page shows the estimated processing time for that specific permit.</p>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text);">How long does it take to get a permit in {{ jurisdiction_name }}?</h3>
+                    <p style="color: var(--text-light);">Processing times vary by permit type, ranging from a few days to several weeks. Each permit page shows the estimated processing time for that specific permit.</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">What documents do I need to apply for permits?</h3>
-                    <p class="text-gray-700">Required documents vary by permit type. Common requirements include identification, proof of address, business licenses, and insurance certificates. Check the specific permit page for detailed requirements.</p>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text);">What documents do I need to apply for permits?</h3>
+                    <p style="color: var(--text-light);">Required documents vary by permit type. Common requirements include identification, proof of address, business licenses, and insurance certificates. Check the specific permit page for detailed requirements.</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Can I check the status of my application online?</h3>
-                    <p class="text-gray-700">Many {{ jurisdiction_name }} agencies offer online application tracking. Contact the issuing agency directly or check their website for application status updates.</p>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text);">Can I check the status of my application online?</h3>
+                    <p style="color: var(--text-light);">Many {{ jurisdiction_name }} agencies offer online application tracking. Contact the issuing agency directly or check their website for application status updates.</p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Do I need to renew my permit?</h3>
-                    <p class="text-gray-700">Most permits require periodic renewal, typically annually. Check your specific permit page for renewal frequency and procedures.</p>
+                    <h3 class="text-lg font-semibold mb-2" style="color: var(--text);">Do I need to renew my permit?</h3>
+                    <p style="color: var(--text-light);">Most permits require periodic renewal, typically annually. Check your specific permit page for renewal frequency and procedures.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 mt-16">
+    <footer class="mt-16" style="background: #1a1a1a; color: #d1d5db;">
         <div class="container mx-auto px-4 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-4">PermitIndex</h3>
+                    <h3 class="font-bold text-lg mb-4" style="color: white;">PermitIndex</h3>
                     <p class="text-sm">Complete Database of US Government Transactions</p>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <h4 class="font-semibold mb-4" style="color: white;">Company</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="/about" class="hover:text-white">About</a></li>
-                        <li><a href="/contact" class="hover:text-white">Contact</a></li>
-                        <li><a href="/privacy" class="hover:text-white">Privacy Policy</a></li>
-                        <li><a href="/terms" class="hover:text-white">Terms of Service</a></li>
+                        <li><a href="/about" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">About</a></li>
+                        <li><a href="/contact" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">Contact</a></li>
+                        <li><a href="/privacy" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">Privacy Policy</a></li>
+                        <li><a href="/terms" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <h4 class="font-semibold mb-4" style="color: white;">Resources</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="/" class="hover:text-white">Browse States</a></li>
-                        <li><a href="/faq" class="hover:text-white">FAQ</a></li>
+                        <li><a href="/" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">Browse States</a></li>
+                        <li><a href="/faq" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <h4 class="font-semibold mb-4" style="color: white;">Connect</h4>
                     <div class="flex space-x-4">
-                        <a href="#" class="hover:text-white" aria-label="Twitter">
+                        <a href="#" onmouseover="this.style.color='white'" onmouseout="this.style.color='#d1d5db'" aria-label="Twitter">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
                             </svg>
@@ -334,7 +334,7 @@
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
+            <div class="mt-8 pt-8 text-sm text-center" style="border-top: 1px solid #333;">
                 <p>&copy; 2024 PermitIndex. All rights reserved.</p>
             </div>
         </div>
