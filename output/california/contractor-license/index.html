@@ -31,6 +31,48 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- PermitIndex Brand Styles -->
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #FF6B35;
+            --text: #1a1a1a;
+            --text-light: #666666;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --success: #10b981;
+            --font-display: 'Arial Black', 'Helvetica Bold', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --radius-large: 12px;
+            --radius-medium: 8px;
+            --radius-small: 6px;
+            --shadow-low: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.1);
+            --shadow-high: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        body { background: var(--bg-light); color: var(--text); }
+        h1, h2 { font-family: var(--font-display); font-weight: 900; letter-spacing: -1px; color: var(--primary); }
+        .logo svg { height: 32px; width: auto; }
+        .star-box { background: white; padding: 30px; border-radius: var(--radius-large); position: relative; box-shadow: var(--shadow-low); }
+        .star-box::before { content: ''; position: absolute; top: -8px; right: 18px; width: 18px; height: 18px; background: var(--bg-light); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        .star-box.primary { background: var(--primary); color: white; }
+        .star-box.bordered { border: 2px solid var(--border); background: white; overflow: hidden; }
+        .star-box.bordered::before { background: var(--border); top: -9px; }
+        .star-button { display: inline-block; padding: 14px 32px; background: var(--accent); color: white; border: none; border-radius: var(--radius-medium); font-weight: 600; font-size: 15px; cursor: pointer; position: relative; transition: all 0.2s; text-decoration: none; }
+        .star-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-medium); }
+        .star-button::before { content: ''; position: absolute; top: -5px; right: 12px; width: 12px; height: 12px; background: var(--bg-light); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        .star-button.secondary { background: var(--primary); }
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-medium); font-size: 13px; font-weight: 600; position: relative; }
+        .status-badge::before { content: ''; position: absolute; top: -5px; right: 12px; width: 12px; height: 12px; background: var(--bg-light); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        .status-badge.online { background: var(--success); color: white; }
+        .status-badge.api { background: var(--primary); color: white; }
+        .info-card { background: white; padding: 24px; border-radius: var(--radius-large); text-align: center; position: relative; border: 2px solid var(--border); overflow: hidden; }
+        .info-card::before { content: ''; position: absolute; top: -8px; right: 18px; width: 18px; height: 18px; background: var(--border); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        .info-value { font-size: 32px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
+        .info-label { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+
     <!-- JSON-LD Structured Data: BreadcrumbList -->
     <script type="application/ld+json">
     {
@@ -167,13 +209,28 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">PermitIndex</a>
+                    <a href="/" class="logo">
+                        <svg viewBox="0 0 240 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PermitIndex">
+                            <title>PermitIndex</title>
+                            <desc>PermitIndex - Complete database of US government transactions</desc>
+                            <defs>
+                                <mask id="p-star-mask">
+                                    <rect width="100%" height="100%" fill="white"/>
+                                    <polygon points="20,2 21.5,6 25.5,6 22.2,8.5 23.5,12.5 20,9.8 16.5,12.5 17.8,8.5 14.5,6 18.5,6" fill="black"/>
+                                </mask>
+                            </defs>
+                            <g fill="var(--primary)" font-family="Arial Black, sans-serif" font-weight="900">
+                                <text x="0" y="32" font-size="36" letter-spacing="-1" mask="url(#p-star-mask)">P</text>
+                                <text x="25" y="32" font-size="36" letter-spacing="-1">ermitIndex</text>
+                            </g>
+                        </svg>
+                    </a>
                     <p class="text-sm text-gray-600">Complete Database of US Government Transactions</p>
                 </div>
                 <nav class="hidden md:flex space-x-6">
-                    <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
-                    <a href="/about" class="text-gray-700 hover:text-blue-600">About</a>
-                    <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+                    <a href="/" style="color: var(--text-light);" class="hover:text-blue-600">Home</a>
+                    <a href="/about" style="color: var(--text-light);" class="hover:text-blue-600">About</a>
+                    <a href="/contact" style="color: var(--text-light);" class="hover:text-blue-600">Contact</a>
                 </nav>
             </div>
         </div>
@@ -543,14 +600,14 @@
 
                 <!-- Common Mistakes Section -->
                 
-                <section class="bg-yellow-50 border border-yellow-200 rounded-lg shadow p-6 mb-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="w-6 h-6 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <section class="star-box bordered p-6 mb-8" style="border-color: #fbbf24; background: #fef3c7;">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center" style="color: var(--text);">
+                        <svg class="w-6 h-6 mr-2" style="color: #d97706;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                         </svg>
                         Common Mistakes to Avoid
                     </h2>
-                    <div class="text-gray-800 leading-relaxed">
+                    <div class="leading-relaxed" style="color: var(--text);">
                         <p>Not documenting work experience properly. Underestimating exam difficulty. Waiting too long to schedule exams.</p>
                     </div>
                 </section>
@@ -558,8 +615,8 @@
 
                 <!-- Community Feedback Section -->
                 
-                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">What People Are Saying</h2>
+                <section class="star-box p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--primary);">What People Are Saying</h2>
                     <p class="text-gray-600 mb-6">Real experiences from people who've completed this permit:</p>
                     <div class="space-y-4">
                         
@@ -623,7 +680,7 @@
 
                 <!-- User Tips Section -->
                 
-                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+                <section class="star-box p-6 mb-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Tips from the Community</h2>
                     <p class="text-gray-600 mb-6">Helpful advice from people who've been through this process:</p>
                     <div class="space-y-4">
@@ -684,7 +741,7 @@
 
                 <!-- FAQ Section -->
                 
-                <section class="bg-white rounded-lg shadow p-6 mb-8 border border-gray-200">
+                <section class="star-box p-6 mb-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
                     <div class="space-y-6">
                         

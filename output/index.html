@@ -31,6 +31,211 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- PermitIndex Brand Styles -->
+    <style>
+        :root {
+            /* Colors */
+            --primary: #003366;
+            --accent: #FF6B35;
+            --text: #1a1a1a;
+            --text-light: #666666;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --success: #10b981;
+
+            /* Typography */
+            --font-display: 'Arial Black', 'Helvetica Bold', sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            /* Spacing */
+            --radius-large: 12px;
+            --radius-medium: 8px;
+            --radius-small: 6px;
+
+            /* Shadows */
+            --shadow-low: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.1);
+            --shadow-high: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        body {
+            background: var(--bg-light);
+            color: var(--text);
+        }
+
+        h1, h2 {
+            font-family: var(--font-display);
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--primary);
+        }
+
+        /* Logo */
+        .logo svg {
+            height: 32px;
+            width: auto;
+        }
+
+        /* Star cutout system */
+        .star-box {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius-large);
+            position: relative;
+            box-shadow: var(--shadow-low);
+        }
+
+        .star-box::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-light);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .star-box.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .star-box.bordered {
+            border: 2px solid var(--border);
+            background: white;
+            overflow: hidden;
+        }
+
+        .star-box.bordered::before {
+            background: var(--border);
+            top: -9px;
+        }
+
+        /* Buttons with star cutouts */
+        .star-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-medium);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .star-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .star-button::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-light);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .star-button.secondary {
+            background: var(--primary);
+        }
+
+        .star-button.outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            overflow: hidden;
+        }
+
+        .star-button.outline::before {
+            background: var(--primary);
+            top: -6px;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: var(--radius-medium);
+            font-size: 13px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .status-badge::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-light);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .status-badge.online {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-badge.api {
+            background: var(--primary);
+            color: white;
+        }
+
+        .status-badge.inperson {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Info cards with star cutouts */
+        .info-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-large);
+            text-align: center;
+            position: relative;
+            border: 2px solid var(--border);
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--border);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .info-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+
     <!-- JSON-LD Structured Data: Organization -->
     <script type="application/ld+json">
     {
@@ -69,24 +274,39 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">PermitIndex</a>
+                    <a href="/" class="logo">
+                        <svg viewBox="0 0 240 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PermitIndex">
+                            <title>PermitIndex</title>
+                            <desc>PermitIndex - Complete database of US government transactions</desc>
+                            <defs>
+                                <mask id="p-star-mask">
+                                    <rect width="100%" height="100%" fill="white"/>
+                                    <polygon points="20,2 21.5,6 25.5,6 22.2,8.5 23.5,12.5 20,9.8 16.5,12.5 17.8,8.5 14.5,6 18.5,6" fill="black"/>
+                                </mask>
+                            </defs>
+                            <g fill="var(--primary)" font-family="Arial Black, sans-serif" font-weight="900">
+                                <text x="0" y="32" font-size="36" letter-spacing="-1" mask="url(#p-star-mask)">P</text>
+                                <text x="25" y="32" font-size="36" letter-spacing="-1">ermitIndex</text>
+                            </g>
+                        </svg>
+                    </a>
                     <p class="text-sm text-gray-600">Complete Database of US Government Transactions</p>
                 </div>
                 <nav class="hidden md:flex space-x-6">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-                    <a href="/about" class="text-gray-700 hover:text-blue-600">About</a>
-                    <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+                    <a href="/" style="color: var(--text-light);" class="hover:text-blue-600 font-medium">Home</a>
+                    <a href="/about" style="color: var(--text-light);" class="hover:text-blue-600">About</a>
+                    <a href="/contact" style="color: var(--text-light);" class="hover:text-blue-600">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
+    <section style="background: linear-gradient(135deg, var(--primary) 0%, #004d99 100%);" class="text-white py-20">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6">Navigate Government Permits with Confidence</h1>
-                <p class="text-xl md:text-2xl mb-8 text-blue-100">Search and compare permits, licenses, and transactions across all 50 US states. Find requirements, costs, and processing times in one place.</p>
+                <h1 style="color: white;" class="text-5xl md:text-6xl font-bold mb-6">Navigate Government Permits with Confidence</h1>
+                <p class="text-xl md:text-2xl mb-8" style="color: rgba(255,255,255,0.9);">Search and compare permits, licenses, and transactions across all 50 US states. Find requirements, costs, and processing times in one place.</p>
 
                 <!-- Search Bar (Placeholder) -->
                 <div class="bg-white rounded-lg shadow-xl p-2 max-w-3xl mx-auto">
@@ -94,9 +314,10 @@
                         <input
                             type="text"
                             placeholder="Search for permits, licenses, or transactions..."
-                            class="flex-1 px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="flex-1 px-4 py-3 text-gray-900 rounded-lg focus:outline-none focus:ring-2"
+                            style="border: 2px solid var(--border);"
                         >
-                        <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        <button class="star-button secondary">
                             <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -107,21 +328,21 @@
 
                 <!-- Stats -->
                 <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                        <div class="text-4xl font-bold mb-2">3</div>
-                        <div class="text-blue-100">Government Permits</div>
+                    <div class="info-card">
+                        <div class="info-value">3</div>
+                        <div class="info-label">Government Permits</div>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                        <div class="text-4xl font-bold mb-2">3</div>
-                        <div class="text-blue-100">Government Agencies</div>
+                    <div class="info-card">
+                        <div class="info-value">3</div>
+                        <div class="info-label">Government Agencies</div>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                        <div class="text-4xl font-bold mb-2">2</div>
-                        <div class="text-blue-100">✅ Online Access</div>
+                    <div class="info-card">
+                        <div class="info-value">2</div>
+                        <div class="info-label">✅ Online Access</div>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                        <div class="text-4xl font-bold mb-2">0</div>
-                        <div class="text-blue-100">🔌 API Available</div>
+                    <div class="info-card">
+                        <div class="info-value">0</div>
+                        <div class="info-label">🔌 API Available</div>
                     </div>
                 </div>
             </div>
@@ -172,34 +393,34 @@
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 
-                <a href="/ca-contractors-state-license-board/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-500 transition transform hover:-translate-y-1">
+                <a href="/ca-contractors-state-license-board/" class="group star-box bordered p-6 hover:shadow-lg transition transform hover:-translate-y-1" style="text-decoration: none; padding: 24px;">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-semibold text-gray-900 group-hover:text-blue-600">CA Contractors State License Board</h3>
-                        <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h3 class="font-semibold group-hover:text-blue-600" style="color: var(--text);">CA Contractors State License Board</h3>
+                        <svg class="w-5 h-5 group-hover:text-blue-600" style="color: var(--text-light);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
-                    <p class="text-sm text-gray-600">1 permits</p>
+                    <p class="text-sm" style="color: var(--text-light);">1 permits</p>
                 </a>
                 
-                <a href="/ca-dept-of-public-health/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-500 transition transform hover:-translate-y-1">
+                <a href="/ca-dept-of-public-health/" class="group star-box bordered p-6 hover:shadow-lg transition transform hover:-translate-y-1" style="text-decoration: none; padding: 24px;">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-semibold text-gray-900 group-hover:text-blue-600">CA Dept of Public Health</h3>
-                        <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h3 class="font-semibold group-hover:text-blue-600" style="color: var(--text);">CA Dept of Public Health</h3>
+                        <svg class="w-5 h-5 group-hover:text-blue-600" style="color: var(--text-light);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
-                    <p class="text-sm text-gray-600">1 permits</p>
+                    <p class="text-sm" style="color: var(--text-light);">1 permits</p>
                 </a>
                 
-                <a href="/ca-secretary-of-state/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-blue-500 transition transform hover:-translate-y-1">
+                <a href="/ca-secretary-of-state/" class="group star-box bordered p-6 hover:shadow-lg transition transform hover:-translate-y-1" style="text-decoration: none; padding: 24px;">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-semibold text-gray-900 group-hover:text-blue-600">CA Secretary of State</h3>
-                        <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h3 class="font-semibold group-hover:text-blue-600" style="color: var(--text);">CA Secretary of State</h3>
+                        <svg class="w-5 h-5 group-hover:text-blue-600" style="color: var(--text-light);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </div>
-                    <p class="text-sm text-gray-600">1 permits</p>
+                    <p class="text-sm" style="color: var(--text-light);">1 permits</p>
                 </a>
                 
             </div>
@@ -214,28 +435,28 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <a href="/california/food-truck-operating-permit/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-blue-500 transition">
-                    <div class="flex items-start justify-between mb-3">
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Statewide (California)</span>
+                <a href="/california/food-truck-operating-permit/" class="group star-box p-6 hover:shadow-xl transition" style="text-decoration: none;">
+                    <div class="flex items-start justify-between mb-3 flex-wrap gap-2">
+                        <span style="background: var(--primary); color: white;" class="inline-block px-3 py-1 text-xs font-semibold rounded-full">Statewide (California)</span>
                         
-                        <span class="inline-flex items-center text-xs text-green-600">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <span class="status-badge online">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
                             Online
                         </span>
                         
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">Food Truck Operating Permit</h3>
-                    <p class="text-gray-600 text-sm mb-4">CA Dept of Public Health</p>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-blue-600" style="color: var(--text);">Food Truck Operating Permit</h3>
+                    <p class="text-sm mb-4" style="color: var(--text-light);">CA Dept of Public Health</p>
                     <div class="flex items-center justify-between text-sm">
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             $500-800
                         </div>
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -244,28 +465,28 @@
                     </div>
                 </a>
                 
-                <a href="/california/business-license/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-blue-500 transition">
-                    <div class="flex items-start justify-between mb-3">
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Statewide (California)</span>
+                <a href="/california/business-license/" class="group star-box p-6 hover:shadow-xl transition" style="text-decoration: none;">
+                    <div class="flex items-start justify-between mb-3 flex-wrap gap-2">
+                        <span style="background: var(--primary); color: white;" class="inline-block px-3 py-1 text-xs font-semibold rounded-full">Statewide (California)</span>
                         
-                        <span class="inline-flex items-center text-xs text-green-600">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <span class="status-badge online">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
                             Online
                         </span>
                         
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">Business License</h3>
-                    <p class="text-gray-600 text-sm mb-4">CA Secretary of State</p>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-blue-600" style="color: var(--text);">Business License</h3>
+                    <p class="text-sm mb-4" style="color: var(--text-light);">CA Secretary of State</p>
                     <div class="flex items-center justify-between text-sm">
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             $50-800
                         </div>
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -274,21 +495,21 @@
                     </div>
                 </a>
                 
-                <a href="/california/contractor-license/" class="group bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-blue-500 transition">
-                    <div class="flex items-start justify-between mb-3">
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Statewide (California)</span>
+                <a href="/california/contractor-license/" class="group star-box p-6 hover:shadow-xl transition" style="text-decoration: none;">
+                    <div class="flex items-start justify-between mb-3 flex-wrap gap-2">
+                        <span style="background: var(--primary); color: white;" class="inline-block px-3 py-1 text-xs font-semibold rounded-full">Statewide (California)</span>
                         
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">Contractor License</h3>
-                    <p class="text-gray-600 text-sm mb-4">CA Contractors State License Board</p>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-blue-600" style="color: var(--text);">Contractor License</h3>
+                    <p class="text-sm mb-4" style="color: var(--text-light);">CA Contractors State License Board</p>
                     <div class="flex items-center justify-between text-sm">
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             $450-500
                         </div>
-                        <div class="flex items-center text-gray-600">
+                        <div class="flex items-center" style="color: var(--text-light);">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -301,14 +522,14 @@
         </section>
 
         <!-- Call to Action Section -->
-        <section class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl shadow-xl p-12 text-center text-white">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Can't Find What You're Looking For?</h2>
-            <p class="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">We're constantly adding new permits and licenses to our database. Let us know what you need.</p>
+        <section class="star-box primary p-12 text-center text-white">
+            <h2 style="color: white;" class="text-3xl md:text-4xl font-bold mb-4">Can't Find What You're Looking For?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto" style="color: rgba(255,255,255,0.9);">We're constantly adding new permits and licenses to our database. Let us know what you need.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/contact" class="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition">
+                <a href="/contact" class="star-button">
                     Request a Permit
                 </a>
-                <a href="/about" class="inline-block bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-800 transition border-2 border-white/20">
+                <a href="/about" class="star-button outline">
                     Learn More
                 </a>
             </div>
