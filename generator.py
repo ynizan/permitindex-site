@@ -174,6 +174,35 @@ class SiteGenerator:
             traceback.print_exc()
             self.stats['errors'] += 1
 
+    def split_numbered_steps(self, text):
+        """
+        Split a text with numbered steps (e.g., "1. Do this. 2. Do that.")
+        into a list of clean step texts without the numbers.
+
+        Args:
+            text: String with numbered steps
+
+        Returns:
+            List of step strings without number prefixes
+        """
+        if not text:
+            return []
+
+        # Split by pattern: space + digit + period + space (e.g., " 2. ")
+        # This preserves periods within sentences
+        steps = re.split(r'\s+\d+\.\s+', text)
+
+        # Clean up steps and remove number prefix from first step if present
+        cleaned_steps = []
+        for step in steps:
+            step = step.strip()
+            if step:
+                # Remove leading number from first step (e.g., "1. text" -> "text")
+                step = re.sub(r'^\d+\.\s*', '', step)
+                cleaned_steps.append(step)
+
+        return cleaned_steps
+
     def generate_transaction_pages(self, df):
         """
         Generate all transaction pages from CSV data
@@ -199,6 +228,12 @@ class SiteGenerator:
                         data[field] = []
                 else:
                     data[field] = []
+
+            # Parse how_to_description into clean steps
+            if 'how_to_description' in data and data['how_to_description']:
+                data['how_to_steps'] = self.split_numbered_steps(data['how_to_description'])
+            else:
+                data['how_to_steps'] = []
 
             # Extract jurisdiction slug
             state_abbrev = data['agency_short'].split()[0] if data['agency_short'] else ""

@@ -416,16 +416,13 @@
 
                         <!-- Steps from how_to_description -->
                         <div class="space-y-6 relative">
-                            {% set steps = how_to_description.split('. ') %}
-                            {% for step in steps %}
-                            {% if step.strip() %}
+                            {% for step in how_to_steps %}
                             <div class="flex items-start">
                                 <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 relative z-10" style="background: var(--primary); color: white;">{{ loop.index }}</div>
                                 <div class="flex-1 pt-1">
-                                    <p class="leading-relaxed" style="color: var(--text);">{{ step.strip().rstrip('.') }}</p>
+                                    <p class="leading-relaxed" style="color: var(--text);">{{ step }}</p>
                                 </div>
                             </div>
-                            {% endif %}
                             {% endfor %}
                         </div>
                     </div>
