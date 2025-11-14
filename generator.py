@@ -533,6 +533,33 @@ class SiteGenerator:
 
         print(f"✓ Robots.txt generated: {robots_path}")
 
+    def copy_favicon_files(self):
+        """Copy favicon files from static/favicon to output/favicon"""
+        import shutil
+
+        print("🎨 Copying favicon files...")
+
+        source_dir = os.path.join('static', 'favicon')
+        dest_dir = os.path.join(self.output_dir, 'favicon')
+
+        if not os.path.exists(source_dir):
+            print("⚠️  Warning: static/favicon directory not found, skipping favicon copy")
+            return
+
+        # Ensure destination directory exists
+        os.makedirs(dest_dir, exist_ok=True)
+
+        # Copy all files from source to destination
+        try:
+            for filename in os.listdir(source_dir):
+                source_file = os.path.join(source_dir, filename)
+                if os.path.isfile(source_file):
+                    shutil.copy2(source_file, os.path.join(dest_dir, filename))
+            print(f"✓ Favicon files copied: {dest_dir}")
+        except Exception as e:
+            print(f"✗ Error copying favicon files: {e}")
+            self.stats['errors'] += 1
+
     def print_statistics(self):
         """Print generation statistics"""
         end_time = datetime.now()
@@ -573,6 +600,9 @@ class SiteGenerator:
 
         # Generate robots.txt
         self.generate_robots_txt()
+
+        # Copy favicon files
+        self.copy_favicon_files()
 
         # Print statistics
         self.print_statistics()

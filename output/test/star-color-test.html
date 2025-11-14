@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star-Border Color Harmony Test | PermitIndex</title>
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8f9fa; color: #1a1a1a; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 36px; font-weight: 900; color: #003366; margin-bottom: 16px; }
+        .subtitle { font-size: 18px; color: #666666; margin-bottom: 40px; }
+
+        .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section h2 { font-size: 24px; font-weight: 700; margin-bottom: 24px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .example { padding: 24px; border-radius: 12px; position: relative; overflow: hidden; }
+
+        /* Star cutout mixin */
+        .example::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        /* Correct examples */
+        .correct-blue {
+            background: white;
+            border: 2px solid #003366;
+        }
+        .correct-blue::before {
+            background: #003366; /* Matches border */
+        }
+
+        .correct-orange {
+            background: white;
+            border: 2px solid #FF6B35;
+        }
+        .correct-orange::before {
+            background: #FF6B35; /* Matches border */
+        }
+
+        .correct-warning {
+            background: rgba(245,158,11,0.1);
+            border: 2px solid #F59E0B;
+        }
+        .correct-warning::before {
+            background: #F59E0B; /* Matches border */
+        }
+
+        .correct-success {
+            background: rgba(16,185,129,0.1);
+            border: 2px solid #10b981;
+        }
+        .correct-success::before {
+            background: #10b981; /* Matches border */
+        }
+
+        /* Incorrect examples */
+        .incorrect-1 {
+            background: white;
+            border: 2px solid #003366;
+            opacity: 0.6;
+            position: relative;
+        }
+        .incorrect-1::before {
+            background: #FF6B35; /* WRONG: Orange star with blue border! */
+        }
+        .incorrect-1::after {
+            content: '❌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+        }
+
+        .incorrect-2 {
+            background: rgba(245,158,11,0.1);
+            border: 2px solid #F59E0B;
+            opacity: 0.6;
+            position: relative;
+        }
+        .incorrect-2::before {
+            background: #e0e0e0; /* WRONG: Gray star with orange border! */
+        }
+        .incorrect-2::after {
+            content: '❌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+        }
+
+        .label { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .label.correct { color: #10b981; }
+        .label.incorrect { color: #EF4444; }
+
+        .code-block { background: #1a1a1a; color: #f8f9fa; padding: 16px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 14px; margin-top: 16px; overflow-x: auto; }
+        .code-block .comment { color: #888; }
+        .code-block .property { color: #FF6B35; }
+        .code-block .value { color: #10b981; }
+
+        .rule-box { background: #FFF3CD; border-left: 4px solid #F59E0B; padding: 20px; border-radius: 8px; margin: 24px 0; }
+        .rule-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⭐ Star-Border Color Harmony Test</h1>
+        <p class="subtitle">Testing the critical rule: Star cutout and border colors must ALWAYS match</p>
+
+        <!-- Correct Examples -->
+        <div class="section">
+            <h2>✅ Correct Examples</h2>
+            <p style="margin-bottom: 24px;">These examples follow the star-border color harmony rule</p>
+
+            <div class="grid">
+                <div>
+                    <p class="label correct">✅ PRIMARY BLUE</p>
+                    <div class="example correct-blue">
+                        <p>Blue border (#003366) with matching blue star</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border and star match */</span>
+<span class="property">border:</span> <span class="value">2px solid #003366</span>;
+<span class="comment">/* Star background */</span>
+<span class="property">background:</span> <span class="value">#003366</span>;
+                    </div>
+                </div>
+
+                <div>
+                    <p class="label correct">✅ ACCENT ORANGE</p>
+                    <div class="example correct-orange">
+                        <p>Orange border (#FF6B35) with matching orange star</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border and star match */</span>
+<span class="property">border:</span> <span class="value">2px solid #FF6B35</span>;
+<span class="comment">/* Star background */</span>
+<span class="property">background:</span> <span class="value">#FF6B35</span>;
+                    </div>
+                </div>
+
+                <div>
+                    <p class="label correct">✅ WARNING</p>
+                    <div class="example correct-warning">
+                        <p>Warning border (#F59E0B) with matching warning star</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border and star match */</span>
+<span class="property">border:</span> <span class="value">2px solid #F59E0B</span>;
+<span class="comment">/* Star background */</span>
+<span class="property">background:</span> <span class="value">#F59E0B</span>;
+                    </div>
+                </div>
+
+                <div>
+                    <p class="label correct">✅ SUCCESS</p>
+                    <div class="example correct-success">
+                        <p>Success border (#10b981) with matching success star</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border and star match */</span>
+<span class="property">border:</span> <span class="value">2px solid #10b981</span>;
+<span class="comment">/* Star background */</span>
+<span class="property">background:</span> <span class="value">#10b981</span>;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incorrect Examples -->
+        <div class="section">
+            <h2>❌ Incorrect Examples</h2>
+            <p style="margin-bottom: 24px;">These examples violate the star-border color harmony rule</p>
+
+            <div class="grid">
+                <div>
+                    <p class="label incorrect">❌ MISMATCHED #1</p>
+                    <div class="example incorrect-1">
+                        <p>Blue border with orange star - unprofessional!</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border is blue */</span>
+<span class="property">border:</span> <span class="value">2px solid #003366</span>;
+<span class="comment">/* Star is orange - WRONG! */</span>
+<span class="property">background:</span> <span class="value">#FF6B35</span>;
+                    </div>
+                </div>
+
+                <div>
+                    <p class="label incorrect">❌ MISMATCHED #2</p>
+                    <div class="example incorrect-2">
+                        <p>Warning border with gray star - inconsistent!</p>
+                    </div>
+                    <div class="code-block">
+<span class="comment">/* Border is warning */</span>
+<span class="property">border:</span> <span class="value">2px solid #F59E0B</span>;
+<span class="comment">/* Star is gray - WRONG! */</span>
+<span class="property">background:</span> <span class="value">#e0e0e0</span>;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Implementation Rule -->
+        <div class="section">
+            <h2>📋 Implementation Rule</h2>
+
+            <div class="rule-box">
+                <h3>🎯 Golden Rule</h3>
+                <p><strong>When using star cutout with borders, the star background color MUST match the border color.</strong></p>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="comment">/* Correct implementation */</span>
+<span class="property">.bordered-element</span> {
+    <span class="property">border:</span> <span class="value">2px solid var(--primary)</span>;
+    <span class="property">position:</span> <span class="value">relative</span>;
+    <span class="property">overflow:</span> <span class="value">hidden</span>;
+}
+
+<span class="property">.bordered-element::before</span> {
+    <span class="property">content:</span> <span class="value">''</span>;
+    <span class="property">position:</span> <span class="value">absolute</span>;
+    <span class="property">top:</span> <span class="value">-8px</span>;
+    <span class="property">right:</span> <span class="value">18px</span>;
+    <span class="property">width:</span> <span class="value">18px</span>;
+    <span class="property">height:</span> <span class="value">18px</span>;
+    <span class="property">background:</span> <span class="value">var(--primary)</span>; <span class="comment">/* MUST match border! */</span>
+    <span class="property">clip-path:</span> <span class="value">polygon(...)</span>;
+}
+            </div>
+
+            <h3 style="margin-top: 32px; margin-bottom: 16px;">Why This Matters</h3>
+            <ul style="padding-left: 24px; line-height: 1.8;">
+                <li>Mismatched colors look unprofessional and confusing</li>
+                <li>Breaks visual hierarchy and consistency</li>
+                <li>Creates visual noise that distracts users</li>
+                <li>Violates design system principles</li>
+                <li>Makes the site appear poorly maintained</li>
+            </ul>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="section">
+            <h2>🚀 Quick Reference</h2>
+
+            <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+                <thead>
+                    <tr style="background: #f8f9fa; border-bottom: 2px solid #e0e0e0;">
+                        <th style="padding: 12px; text-align: left;">Border Color</th>
+                        <th style="padding: 12px; text-align: left;">Star Background</th>
+                        <th style="padding: 12px; text-align: left;">CSS Variable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 12px;">#003366 (Primary Blue)</td>
+                        <td style="padding: 12px;">#003366</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--primary)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 12px;">#FF6B35 (Accent Orange)</td>
+                        <td style="padding: 12px;">#FF6B35</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--accent)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 12px;">#E0E0E0 (Border Gray)</td>
+                        <td style="padding: 12px;">#E0E0E0</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--border)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 12px;">#10b981 (Success)</td>
+                        <td style="padding: 12px;">#10b981</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--success)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #e0e0e0;">
+                        <td style="padding: 12px;">#F59E0B (Warning)</td>
+                        <td style="padding: 12px;">#F59E0B</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--warning)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px;">#EF4444 (Error)</td>
+                        <td style="padding: 12px;">#EF4444</td>
+                        <td style="padding: 12px; font-family: monospace;">var(--error)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="text-align: center; margin-top: 48px; padding: 24px; background: white; border-radius: 12px;">
+            <p style="font-size: 14px; color: #666;">
+                <strong>Test Page Generated:</strong> November 2024<br>
+                Part of the PermitIndex Brand System<br>
+                <a href="/docs/BRAND_GUIDELINES.md" style="color: #003366;">View Full Brand Guidelines</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

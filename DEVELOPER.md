@@ -323,6 +323,160 @@ All PermitIndex colors meet **WCAG 2.1 Level AA** requirements:
 
 ---
 
+## Star Cutout Color Rules
+
+### The Golden Rule: Stars Must Match Borders
+
+**CRITICAL:** When using star cutouts with borders, the star background color MUST always match the border color.
+
+### Why This Matters
+
+- Mismatched colors look unprofessional
+- Breaks visual consistency
+- Creates confusing visual hierarchy
+- Makes the site appear poorly maintained
+
+### Correct Implementation
+
+#### ✅ With Border - Star Matches Border
+
+```html
+<!-- Blue border = Blue star -->
+<div class="alert-info">
+    Content
+</div>
+
+<style>
+.alert-info {
+    background: rgba(0,51,102,0.05);
+    border: 2px solid var(--primary);  /* Blue border */
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.alert-info::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 18px;
+    width: 18px;
+    height: 18px;
+    background: var(--primary);  /* Blue star - MATCHES! */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+</style>
+```
+
+#### ✅ Without Border - Star Matches Page Background
+
+```html
+<!-- No border = Page background star -->
+<div class="star-box">
+    Content
+</div>
+
+<style>
+.star-box {
+    background: white;
+    border-radius: 12px;
+    position: relative;
+}
+
+.star-box::before {
+    background: var(--bg-light);  /* Page background #f8f9fa */
+    /* Creates cutout effect revealing page behind */
+}
+</style>
+```
+
+### Alert Components with Color Harmony
+
+```css
+/* Warning Alert - Yellow/Orange */
+.alert-warning {
+    background: rgba(245,158,11,0.1);
+    border: 2px solid var(--warning);  /* Orange */
+    /* ... */
+}
+.alert-warning::before {
+    background: var(--warning);  /* MUST match border */
+}
+
+/* Success Alert - Green */
+.alert-success {
+    background: rgba(16,185,129,0.1);
+    border: 2px solid var(--success);  /* Green */
+}
+.alert-success::before {
+    background: var(--success);  /* MUST match border */
+}
+
+/* Error Alert - Red */
+.alert-error {
+    background: rgba(239,68,68,0.1);
+    border: 2px solid var(--error);  /* Red */
+}
+.alert-error::before {
+    background: var(--error);  /* MUST match border */
+}
+```
+
+### Common Color Pairings
+
+| Border Color | Star Background | Use Case |
+|---|---|---|
+| `var(--primary)` #003366 | `var(--primary)` | Primary info boxes |
+| `var(--accent)` #FF6B35 | `var(--accent)` | CTA/featured boxes |
+| `var(--warning)` #F59E0B | `var(--warning)` | Warning/caution boxes |
+| `var(--success)` #10b981 | `var(--success)` | Success/tip boxes |
+| `var(--error)` #EF4444 | `var(--error)` | Error/danger boxes |
+| `var(--border)` #E0E0E0 | `var(--border)` | Neutral bordered boxes |
+| None (no border) | `var(--bg-light)` | Standard white cards |
+
+### Incorrect Examples (DON'T DO THIS)
+
+#### ❌ Mismatched Colors
+
+```html
+<!-- WRONG: Blue border with orange star -->
+<div style="border: 2px solid var(--primary);">
+    Content
+</div>
+<style>
+div::before {
+    background: var(--accent);  /* ❌ Doesn't match border! */
+}
+</style>
+
+<!-- WRONG: Warning border with gray star -->
+<div class="star-box bordered" style="border-color: var(--warning);">
+    <!-- The default .star-box.bordered uses var(--border) for star -->
+    <!-- This creates a mismatch! Need custom class instead -->
+</div>
+```
+
+### How to Fix Existing Violations
+
+1. **Identify the border color** - Check inline styles or CSS class
+2. **Match the star background** - Use the SAME color variable
+3. **Test visually** - Open `/test/star-color-test.html` for reference
+4. **Use alert classes** - Prefer `.alert-warning`, `.alert-success`, etc.
+
+### Testing
+
+```bash
+# Generate test page
+python3 generator.py
+
+# View in browser
+open output/test/star-color-test.html
+```
+
+The test page shows correct and incorrect examples side-by-side.
+
+---
+
 ## Common Mistakes
 
 ### Mistake #1: Using Tailwind Color Classes

@@ -457,6 +457,55 @@ All badges include star cutout in top-right.
 ❌ Don't make star larger than 20px
 ❌ Don't use multiple stars per element
 
+### Star-Border Color Harmony Rule
+
+**CRITICAL: Star cutout and border colors must ALWAYS match**
+
+When using star cutouts with borders, the star background color must match the border color to maintain visual consistency and professional appearance.
+
+✅ **CORRECT Examples:**
+- Blue border (#003366) + Blue star background
+- Orange border (#FF6B35) + Orange star background
+- Gray border (#E0E0E0) + Gray star background
+- Green border (#10B981) + Green star background
+
+❌ **WRONG Examples:**
+- Orange star + Yellow background (creates color clash)
+- Blue star + Orange border (inconsistent)
+- Different colored star than its containing border
+- Random star colors that don't match context
+
+**Implementation Rule:**
+
+When using star cutout with borders:
+```css
+.bordered-box {
+    border: 2px solid #003366; /* Border color */
+}
+
+.bordered-box::before {
+    background: #003366; /* MUST match border color */
+    /* NOT the page background color */
+}
+```
+
+**For colored backgrounds without borders:**
+- Star cutout uses PAGE background color (#F8F9FA or #FFFFFF)
+- This creates proper contrast and "notch" effect
+- Star appears as a cutout revealing the page behind
+
+**For colored backgrounds WITH borders:**
+- Star cutout uses BORDER color
+- Border and star form unified frame
+- Use `overflow: hidden` to show only bottom portion of star
+- Creates cohesive, professional appearance
+
+**Why this matters:**
+- Mismatched colors look unprofessional
+- Breaks visual hierarchy
+- Confuses the eye about element boundaries
+- Violates design consistency principles
+
 ---
 
 ## Quick Reference

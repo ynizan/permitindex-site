@@ -225,15 +225,44 @@ However, ensure when implementing:
 
 ---
 
+## Star Color Mismatches Found
+
+### Critical Issue: Warning Box Star-Border Mismatch
+
+**Location:** `templates/transaction_page.html:349`
+
+**Problem:**
+```html
+<section class="star-box bordered p-6 mb-8" style="border-color: var(--warning); background: rgba(245,158,11,0.1);">
+```
+
+The inline style sets `border-color: var(--warning)` (#F59E0B - orange), but the CSS class `.star-box.bordered::before` uses `background: var(--border)` (#E0E0E0 - gray).
+
+**Result:** Orange border with gray star cutout - color mismatch!
+
+**Fix Required:** Need to create a separate `.star-box.warning` class or use inline star styling to match the warning border color.
+
+### Similar Potential Issues
+
+Need to check:
+- All instances of `.star-box.bordered` with custom border colors
+- Any components that override border color but rely on default star background
+- Warning, error, and success alert components
+
+---
+
 ## Next Steps
 
 1. ✅ Create `static/css/variables.css` with brand system
-2. ⏳ Systematically update all templates
-3. ⏳ Update generator.py with brand reference comments
-4. ⏳ Create test page showing all brand colors
-5. ⏳ Document proper usage in DEVELOPER.md
-6. ⏳ Run full site generation and visual testing
-7. ⏳ Commit changes with detailed message
+2. ✅ Systematically update all templates
+3. ✅ Update generator.py with brand reference comments
+4. ✅ Create test page showing all brand colors
+5. ✅ Document proper usage in DEVELOPER.md
+6. ✅ Run full site generation and visual testing
+7. ✅ Commit changes with detailed message
+8. ⏳ Fix star-border color mismatches
+9. ⏳ Add favicon system
+10. ⏳ Create star-color harmony test page
 
 ---
 

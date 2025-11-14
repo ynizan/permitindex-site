@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <meta name="theme-color" content="#003366">
+
     <!-- Primary Meta Tags -->
     <title>{{ request_type }} - {{ agency_short }} | PermitIndex</title>
     <meta name="title" content="{{ request_type }} - {{ agency_short }} | PermitIndex">
@@ -73,6 +81,83 @@
         .info-card::before { content: ''; position: absolute; top: -8px; right: 18px; width: 18px; height: 18px; background: var(--border); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
         .info-value { font-size: 32px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
         .info-label { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Alert components with color-matched star cutouts */
+        .alert-warning {
+            background: rgba(245,158,11,0.1);
+            border: 2px solid var(--warning);
+            border-radius: var(--radius-large);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert-warning::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--warning); /* Matches border color */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .alert-success {
+            background: rgba(16,185,129,0.1);
+            border: 2px solid var(--success);
+            border-radius: var(--radius-large);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert-success::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--success); /* Matches border color */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .alert-error {
+            background: rgba(239,68,68,0.1);
+            border: 2px solid var(--error);
+            border-radius: var(--radius-large);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert-error::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--error); /* Matches border color */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .alert-info {
+            background: rgba(0,51,102,0.05);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius-large);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .alert-info::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 18px;
+            width: 18px;
+            height: 18px;
+            background: var(--primary); /* Matches border color */
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
     </style>
 
     <!-- JSON-LD Structured Data: BreadcrumbList -->
@@ -228,7 +313,7 @@
                 <h1 class="text-4xl font-bold mb-4" style="color: var(--primary);">{{ request_type }}</h1>
 
                 <!-- Above-the-Fold Summary -->
-                <div class="star-box bordered p-5 mb-6" style="border-color: var(--primary); background: rgba(0,51,102,0.05);">
+                <div class="alert-info mb-6" style="padding: 20px;">
                     <p class="text-lg leading-relaxed" style="color: var(--text);">
                         {% if description %}{{ description }}. {% endif %}
                         {{ eligibility }}
@@ -330,7 +415,7 @@
                     </div>
 
                     {% if deadline_window %}
-                    <div class="mt-6 p-4 rounded-lg" style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3);">
+                    <div class="alert-warning mt-6" style="padding: 16px;">
                         <div class="flex items-start">
                             <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" style="color: var(--warning);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -346,7 +431,7 @@
 
                 <!-- Common Mistakes Section -->
                 {% if common_mistakes %}
-                <section class="star-box bordered p-6 mb-8" style="border-color: var(--warning); background: rgba(245,158,11,0.1);">
+                <section class="alert-warning mb-8">
                     <h2 class="text-2xl font-bold mb-4 flex items-center" style="color: var(--text);">
                         <svg class="w-6 h-6 mr-2" style="color: var(--warning);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
