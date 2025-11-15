@@ -1,0 +1,74 @@
+name: Approve User Feedback
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  approve-feedback:
+    if: github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Mark feedback as approved
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import csv
+
+          issue_number = os.environ['ISSUE_NUMBER']
+          csv_file = 'data/user_feedback.csv'
+
+          # Read all rows
+          rows = []
+          with open(csv_file, 'r', encoding='utf-8') as f:
+              reader = csv.DictReader(f)
+              fieldnames = reader.fieldnames
+              for row in reader:
+                  if row['github_issue_number'] == issue_number:
+                      row['approved'] = 'yes'
+                  rows.append(row)
+
+          # Write back
+          with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+              writer = csv.DictWriter(f, fieldnames=fieldnames)
+              writer.writeheader()
+              writer.writerows(rows)
+
+          print(f"✅ Approved feedback from issue #{issue_number}")
+          EOF
+
+      - name: Commit approval
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add data/user_feedback.csv
+          git commit -m "Approve feedback from issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Close issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            });
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ This feedback has been approved and will appear on the website after the next build (2-3 minutes).'
+            })

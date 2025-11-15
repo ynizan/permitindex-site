@@ -231,11 +231,15 @@ class SiteGenerator:
     def load_all_csv_files(self):
         """
         Load and validate all CSV files from data directory
+        (Excludes user_feedback.csv which has a different schema)
 
         Returns:
             Combined pandas DataFrame with all data
         """
         csv_files = sorted(glob.glob(os.path.join(self.data_dir, '*.csv')))
+
+        # Exclude user_feedback.csv - it has a different schema
+        csv_files = [f for f in csv_files if os.path.basename(f) != 'user_feedback.csv']
 
         if not csv_files:
             print(f"❌ No CSV files found in {self.data_dir}")
@@ -385,6 +389,39 @@ class SiteGenerator:
 
         return cleaned_steps
 
+    def load_feedback_for_permit(self, permit_slug):
+        """
+        Load approved feedback for a specific permit
+
+        Args:
+            permit_slug: The permit slug (e.g., 'food-truck-operating-permit')
+
+        Returns:
+            List of feedback dictionaries
+        """
+        try:
+            feedback_file = os.path.join(self.data_dir, 'user_feedback.csv')
+            if not os.path.exists(feedback_file):
+                return []
+
+            feedback_df = pd.read_csv(feedback_file)
+
+            # Filter for this permit and approved items
+            permit_feedback = feedback_df[
+                (feedback_df['permit_slug'] == permit_slug) &
+                (feedback_df['approved'] == 'yes')
+            ]
+
+            # Sort by helpful_count descending
+            permit_feedback = permit_feedback.sort_values('helpful_count', ascending=False)
+
+            return permit_feedback.to_dict('records')
+        except FileNotFoundError:
+            return []
+        except Exception as e:
+            print(f"⚠️  Warning: Could not load feedback for {permit_slug}: {str(e)}")
+            return []
+
     def generate_transaction_pages(self, df):
         """
         Generate all transaction pages from CSV data
@@ -443,6 +480,9 @@ class SiteGenerator:
                 permit_slug,
                 'index.html'
             )
+
+            # Load community feedback for this permit
+            data['feedback_items'] = self.load_feedback_for_permit(permit_slug)
 
             # Generate the page
             self.generate_page('transaction_page.html', data, output_path)

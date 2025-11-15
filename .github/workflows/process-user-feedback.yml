@@ -1,0 +1,97 @@
+name: Process User Feedback
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  process-feedback:
+    # Only run if issue has 'user-tip' label
+    if: contains(github.event.issue.labels.*.name, 'user-tip')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Parse issue and add to CSV
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_CREATED: ${{ github.event.issue.created_at }}
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+          import csv
+          from datetime import datetime
+
+          # Parse issue body
+          issue_body = os.environ['ISSUE_BODY']
+          issue_number = os.environ['ISSUE_NUMBER']
+          created_at = os.environ['ISSUE_CREATED'][:10]  # Get just the date
+
+          # Extract fields using regex
+          permit_match = re.search(r'\*\*Permit:\*\*\s*(.+)', issue_body)
+          type_match = re.search(r'\*\*Type:\*\*\s*(.+)', issue_body)
+          feedback_match = re.search(r'\*\*Feedback:\*\*\s*(.+)', issue_body, re.DOTALL)
+
+          if not all([permit_match, type_match, feedback_match]):
+              print("Error: Could not parse issue body")
+              exit(1)
+
+          permit_slug = permit_match.group(1).strip()
+          feedback_type = type_match.group(1).strip()
+          feedback_text = feedback_match.group(1).strip()
+
+          # Validate feedback_type
+          valid_types = ['tip', 'common_mistake', 'time_estimate', 'cost_note']
+          if feedback_type not in valid_types:
+              print(f"Error: Invalid feedback type: {feedback_type}")
+              exit(1)
+
+          # Append to CSV
+          csv_file = 'data/user_feedback.csv'
+          row = [
+              permit_slug,
+              feedback_type,
+              feedback_text,
+              0,  # helpful_count starts at 0
+              created_at,
+              'no',  # approved = no by default (manual review needed)
+              issue_number
+          ]
+
+          with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+              writer = csv.writer(f)
+              writer.writerow(row)
+
+          print(f"✅ Added feedback to {csv_file}")
+          print(f"Permit: {permit_slug}")
+          print(f"Type: {feedback_type}")
+          print(f"Issue: #{issue_number}")
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add data/user_feedback.csv
+          git commit -m "Add user feedback from issue #${{ github.event.issue.number }}" || exit 0
+          git push
+
+      - name: Comment on issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Thank you for your feedback! It has been added to our database and is pending review. Once approved, it will appear on the PermitIndex website within 24 hours.\n\nTo approve: Add the `approved` label to this issue.\nTo reject: Close this issue without the `approved` label.'
+            })
