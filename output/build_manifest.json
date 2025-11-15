@@ -1,19 +1,22 @@
 {
-  "build_time": "2025-11-15T21:45:53.050569",
+  "build_time": "2025-11-15T22:02:27.811080",
   "generator_version": "2.0",
-  "total_pages": 5,
-  "total_permits": 3,
-  "files_processed": 1,
+  "total_pages": 7,
+  "total_permits": 4,
+  "files_processed": 2,
   "permits_per_file": {
-    "permits.csv": 3
+    "permits-ca-test.csv": 3,
+    "permits-tx-test.csv": 1
   },
   "jurisdictions": [
     "CA Contractors State License Board",
     "CA Dept of Public Health",
-    "CA Secretary of State"
+    "CA Secretary of State",
+    "TX Secretary of State"
   ],
   "validation_warnings": [
-    "permits.csv: Extra columns found (will be included): {'agency_email', 'eligibility', 'estimated_monthly_volume', 'agency_hours', 'description', 'agency_address', 'common_mistakes', 'date_extracted', 'user_tips', 'related_pages', 'mcp_available', 'payment_form_url', 'source_url', 'agency_phone', 'community_feedback', 'document_requirements', 'faqs', 'processing_time', 'deadline_window', 'how_to_description'}"
+    "permits-ca-test.csv: Extra columns found (will be included): {'agency_address', 'mcp_available', 'description', 'how_to_description', 'document_requirements', 'date_extracted', 'agency_email', 'processing_time', 'common_mistakes', 'estimated_monthly_volume', 'eligibility', 'faqs', 'deadline_window', 'source_url', 'community_feedback', 'agency_phone', 'payment_form_url', 'user_tips', 'agency_hours', 'related_pages'}",
+    "permits-tx-test.csv: Extra columns found (will be included): {'agency_address', 'mcp_available', 'description', 'how_to_description', 'document_requirements', 'date_extracted', 'agency_email', 'processing_time', 'common_mistakes', 'estimated_monthly_volume', 'eligibility', 'faqs', 'deadline_window', 'source_url', 'community_feedback', 'agency_phone', 'payment_form_url', 'user_tips', 'agency_hours', 'related_pages'}"
   ],
   "python_version": "3.9.6 (default, Apr 30 2025, 02:07:17) \n[Clang 17.0.0 (clang-1700.0.13.5)]"
 }

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2025-11-15T21:45:53.050067",
-  "total_permits": 3,
+  "generated_at": "2025-11-15T22:02:27.810423",
+  "total_permits": 4,
   "permits": [
     {
       "agency_short": "CA Dept of Public Health",
@@ -30,7 +30,7 @@
       "processing_time": "4-6 weeks",
       "related_pages": "california-business-license,california-sellers-permit",
       "user_tips": "[{\"tip\":\"Bring extra copies of all documents to your inspection - they often ask for duplicates\",\"author\":\"FoodTruckMike\",\"date\":\"2024-11\",\"helpful\":24},{\"tip\":\"Get your commissary agreement signed BEFORE applying. This was a major holdup for me.\",\"author\":\"TacoTrucker\",\"date\":\"2024-10\",\"helpful\":18},{\"tip\":\"Take photos of your equipment layout during installation. The inspector may ask to see the installation process.\",\"author\":\"SFStreetFood\",\"date\":\"2024-09\",\"helpful\":15},{\"tip\":\"Budget extra for the first inspection - you'll likely need to make minor fixes and schedule a re-inspection\",\"author\":\"Anonymous\",\"date\":\"2024-08\",\"helpful\":12},{\"tip\":\"Join the CA Mobile Food Vendors Facebook group - tons of helpful tips from experienced operators\",\"author\":\"BurritoQueen\",\"date\":\"2024-11\",\"helpful\":31}]",
-      "source_file": "permits.csv",
+      "source_file": "permits-ca-test.csv",
       "url_slug": "/california/food-truck-operating-permit/",
       "jurisdiction_slug": "california",
       "permit_slug": "food-truck-operating-permit"
@@ -63,7 +63,7 @@
       "processing_time": "1-3 weeks",
       "related_pages": "california-food-truck-permit,california-sellers-permit",
       "user_tips": "[{\"tip\":\"File online - it's much faster than mail (days vs weeks)\",\"author\":\"StartupSam\",\"date\":\"2024-11\",\"helpful\":45},{\"tip\":\"Check name availability first at bizfileonline to avoid rejection\",\"author\":\"BusinessOwner123\",\"date\":\"2024-10\",\"helpful\":32},{\"tip\":\"Set a calendar reminder for your Statement of Information - missing it costs $250 in late fees\",\"author\":\"Anonymous\",\"date\":\"2024-09\",\"helpful\":28}]",
-      "source_file": "permits.csv",
+      "source_file": "permits-ca-test.csv",
       "url_slug": "/california/business-license/",
       "jurisdiction_slug": "california",
       "permit_slug": "business-license"
@@ -96,10 +96,43 @@
       "processing_time": "6-8 weeks",
       "related_pages": "california-business-license,california-workers-comp-insurance",
       "user_tips": "[{\"tip\":\"Take an exam prep course - well worth the $200-300 investment. Passing rate goes up significantly.\",\"author\":\"GC_Mike\",\"date\":\"2024-11\",\"helpful\":52},{\"tip\":\"Document your work experience meticulously. Get letters from employers on company letterhead.\",\"author\":\"Electrician_Joe\",\"date\":\"2024-10\",\"helpful\":38},{\"tip\":\"Schedule your exams as soon as your application is approved - test dates fill up fast\",\"author\":\"Anonymous\",\"date\":\"2024-09\",\"helpful\":29}]",
-      "source_file": "permits.csv",
+      "source_file": "permits-ca-test.csv",
       "url_slug": "/california/contractor-license/",
       "jurisdiction_slug": "california",
       "permit_slug": "contractor-license"
+    },
+    {
+      "agency_short": "TX Secretary of State",
+      "agency_full": "Texas Secretary of State",
+      "request_type": "Texas LLC Formation",
+      "cost": "$300",
+      "effort_hours": "3-5 hours",
+      "location_applicability": "Statewide (Texas)",
+      "online_available": "Yes",
+      "api_available": "Yes",
+      "agency_address": "1019 Brazos Street, Austin, TX 78701",
+      "agency_email": "corpinfo@sos.texas.gov",
+      "agency_hours": "Monday-Friday 8:00 AM - 5:00 PM CT",
+      "agency_phone": "512-463-5555",
+      "common_mistakes": "Not appointing a registered agent before filing. Choosing a business name that's already taken. Missing the initial franchise tax report deadline (results in penalties). Not understanding the difference between formation and getting an EIN.",
+      "community_feedback": "[{\"quote\":\"Filed online and got approval in 3 business days. Very smooth process!\",\"source\":\"Google Reviews\",\"date\":\"2024-10\",\"rating\":5},{\"quote\":\"Website is a bit clunky but the process itself is straightforward. Make sure you have all docs ready before starting.\",\"source\":\"Trustpilot\",\"date\":\"2024-09\",\"rating\":4},{\"quote\":\"Forgot to file franchise tax report and got hit with penalties. Wish they sent reminders!\",\"source\":\"Reddit r/smallbusiness\",\"date\":\"2024-08\",\"rating\":3}]",
+      "date_extracted": "2024-01-15",
+      "deadline_window": "File within 90 days of starting business operations to avoid back-taxes and penalties",
+      "description": "Form a Limited Liability Company (LLC) in Texas for legal business operation",
+      "document_requirements": "Certificate of Formation (Form 205), Registered agent information, Business name reservation confirmation (if reserved), EIN from IRS, Payment for filing fee ($300)",
+      "eligibility": "Any individual or group wanting to form a limited liability company in Texas. Foreign LLCs (formed in other states) must register to do business in Texas.",
+      "estimated_monthly_volume": "3000-5000",
+      "faqs": "[{\"question\":\"How long does it take to form an LLC in Texas?\",\"answer\":\"Online filings through SOSDirect typically process in 5-7 business days. Expedited service is available for an additional fee ($25 for 3-day, $50 for 2-day, $100 for 1-day processing).\"},{\"question\":\"How much does it cost to form an LLC in Texas?\",\"answer\":\"The state filing fee is $300. Additional costs may include registered agent service ($100-200/year if not using your own address), operating agreement drafting ($0-500), and any local business permits.\"},{\"question\":\"Do I need a registered agent for my Texas LLC?\",\"answer\":\"Yes, every Texas LLC must have a registered agent with a physical address in Texas (not a P.O. Box). This person or company receives legal documents and official state correspondence on behalf of your LLC.\"},{\"question\":\"What is the Texas Franchise Tax and when do I pay it?\",\"answer\":\"The Texas Franchise Tax is an annual tax on LLCs. Your initial report is due by May 15th of the year following formation. Most small LLCs qualify for the 'no tax due' threshold if revenue is under $2.47 million, but you must still file the report.\"},{\"question\":\"Can I use my home address for my Texas LLC?\",\"answer\":\"Yes, you can use your home address as your principal office address. However, your registered agent address becomes public record, so many business owners use a registered agent service for privacy.\"},{\"question\":\"Do I need an operating agreement for my Texas LLC?\",\"answer\":\"Texas doesn't require you to file an operating agreement, but it's highly recommended. It governs internal operations, member relationships, and protects your limited liability status. Most banks require one to open a business account.\"},{\"question\":\"What's the difference between forming an LLC and getting a business license?\",\"answer\":\"Forming an LLC creates your business entity with the state. A business license (from city/county) gives you permission to operate in a specific location. Most businesses need both, plus potentially other industry-specific permits.\"}]",
+      "how_to_description": "1. Choose a unique business name that complies with Texas naming requirements and check availability at the Texas Secretary of State website. 2. Appoint a registered agent with a physical Texas address to receive legal documents. 3. File a Certificate of Formation (Form 205) online through SOSDirect or by mail. 4. Create an Operating Agreement (not required to file but highly recommended for internal governance). 5. Obtain an Employer Identification Number (EIN) from the IRS for tax purposes. 6. File initial Franchise Tax Report within one year of formation. 7. Consider registering for Texas sales tax permit if selling goods. 8. Obtain necessary local business permits and licenses from your city or county.",
+      "mcp_available": "No",
+      "payment_form_url": "https://www.sos.texas.gov/corp/index.shtml",
+      "processing_time": "5-7 business days",
+      "related_pages": "texas-sales-tax-permit,texas-franchise-tax",
+      "user_tips": "[{\"tip\":\"Use the SOSDirect online filing system - it's faster than mail and you get instant confirmation\",\"author\":\"AustinStartup\",\"date\":\"2024-11\",\"helpful\":67},{\"tip\":\"Set a calendar reminder for your franchise tax report due date - it's easy to forget and penalties add up\",\"author\":\"DallasBusinessOwner\",\"date\":\"2024-10\",\"helpful\":54},{\"tip\":\"Get your EIN from the IRS immediately after formation - you'll need it for opening bank accounts\",\"author\":\"HTownEntrepreneur\",\"date\":\"2024-09\",\"helpful\":42},{\"tip\":\"Consider using a registered agent service ($100-200/year) instead of your home address for privacy\",\"author\":\"TexasLLC_Pro\",\"date\":\"2024-11\",\"helpful\":38},{\"tip\":\"File your Certificate of Formation before January 1st if possible - simplifies your first franchise tax report\",\"author\":\"AccountantTX\",\"date\":\"2024-08\",\"helpful\":29}]",
+      "source_file": "permits-tx-test.csv",
+      "url_slug": "/texas/texas-llc-formation/",
+      "jurisdiction_slug": "texas",
+      "permit_slug": "texas-llc-formation"
     }
   ]
 }
