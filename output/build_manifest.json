@@ -1,5 +1,5 @@
 {
-  "build_time": "2025-11-15T22:40:26.947165",
+  "build_time": "2025-11-15T22:46:44.232161",
   "generator_version": "2.0",
   "total_pages": 7,
   "total_permits": 4,
@@ -15,8 +15,8 @@
     "TX Secretary of State"
   ],
   "validation_warnings": [
-    "permits-ca-test.csv: Extra columns found (will be included): {'agency_address', 'user_tips', 'mcp_available', 'community_feedback', 'common_mistakes', 'eligibility', 'agency_email', 'payment_form_url', 'date_extracted', 'source_url', 'document_requirements', 'agency_hours', 'deadline_window', 'agency_phone', 'description', 'faqs', 'related_pages', 'estimated_monthly_volume', 'how_to_description', 'processing_time'}",
-    "permits-tx-test.csv: Extra columns found (will be included): {'agency_address', 'user_tips', 'mcp_available', 'community_feedback', 'common_mistakes', 'eligibility', 'agency_email', 'payment_form_url', 'date_extracted', 'source_url', 'document_requirements', 'agency_hours', 'deadline_window', 'agency_phone', 'description', 'faqs', 'related_pages', 'estimated_monthly_volume', 'how_to_description', 'processing_time'}"
+    "permits-ca-test.csv: Extra columns found (will be included): {'processing_time', 'how_to_description', 'eligibility', 'user_tips', 'agency_address', 'agency_email', 'related_pages', 'description', 'mcp_available', 'faqs', 'deadline_window', 'document_requirements', 'source_url', 'estimated_monthly_volume', 'payment_form_url', 'common_mistakes', 'date_extracted', 'agency_hours', 'community_feedback', 'agency_phone'}",
+    "permits-tx-test.csv: Extra columns found (will be included): {'processing_time', 'how_to_description', 'eligibility', 'user_tips', 'agency_address', 'agency_email', 'related_pages', 'description', 'mcp_available', 'faqs', 'deadline_window', 'document_requirements', 'source_url', 'estimated_monthly_volume', 'payment_form_url', 'common_mistakes', 'date_extracted', 'agency_hours', 'community_feedback', 'agency_phone'}"
   ],
   "python_version": "3.9.6 (default, Apr 30 2025, 02:07:17) \n[Clang 17.0.0 (clang-1700.0.13.5)]"
 }
