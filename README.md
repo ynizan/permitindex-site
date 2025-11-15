@@ -159,6 +159,55 @@ python3 screenshot_homepage.py    # Homepage
 python3 screenshot_permit.py      # Sample permit page
 ```
 
+### Visual Regression Testing
+
+The project includes automated visual regression tests to catch UI bugs like duplicate numbering, misalignment, and layout issues.
+
+**Setup (one-time):**
+```bash
+# Install Playwright (if not already installed)
+pip3 install playwright
+python3 -m playwright install chromium
+
+# Create baseline screenshots
+python3 -m http.server 8000 --directory output &  # Start local server
+python3 tests/visual_regression_test.py --mode baseline
+```
+
+**Running Tests:**
+```bash
+# Make sure local server is running
+python3 -m http.server 8000 --directory output &
+
+# Run all visual regression tests
+python3 tests/visual_regression_test.py --mode test
+
+# Test against production
+python3 tests/visual_regression_test.py --mode test --url https://permitindex.com
+```
+
+**What Gets Tested:**
+- ✅ **Timeline Numbering**: Ensures sequential numbering (1, 2, 3...) without duplicates
+- ✅ **No Duplicate Elements**: Checks for duplicate text in timeline steps
+- ✅ **Visual Alignment**: Verifies proper alignment of circles and text
+- ✅ **Visual Regression**: Compares current screenshots with baseline to detect visual changes
+
+**Test Output:**
+- Baseline screenshots: `tests/screenshots/baseline/`
+- Current screenshots: `tests/screenshots/current/`
+- Test results: Colored console output with PASS/FAIL status
+
+**Updating Baselines:**
+```bash
+# After making intentional visual changes, update baselines
+python3 tests/visual_regression_test.py --mode baseline
+```
+
+**Common Issues:**
+- If tests fail after fixing a bug, update baselines with `--mode baseline`
+- Make sure the local server is running before running tests
+- Tests require Chromium browser (installed via `playwright install`)
+
 ## Generated Pages
 
 ### Homepage (`/index.html`)
