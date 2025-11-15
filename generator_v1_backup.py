@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-PermitIndex Static Site Generator v2.0
-Supports multiple CSV files with comprehensive validation
+PermitIndex Static Site Generator
 
 This script generates static HTML pages for government transactions.
-It reads data from ALL CSV files in /data and validates them before generation.
+It reads data from CSV files and renders them using Jinja2 templates.
 
 Directory Structure:
 - /templates: Jinja2 templates
-- /data: CSV data files (supports multiple files)
+- /data: CSV data files
 - /output: Generated HTML pages
 - /static: Static assets (CSS, JS, images)
 - /docs: Brand guidelines and documentation
@@ -37,7 +36,6 @@ Usage:
 
 import os
 import json
-import glob
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
@@ -45,112 +43,8 @@ import sys
 import re
 
 
-# Required columns for all CSV files
-REQUIRED_COLUMNS = [
-    'agency_short',
-    'agency_full',
-    'request_type',
-    'cost',
-    'effort_hours',
-    'location_applicability',
-    'online_available',
-    'api_available'
-]
-
-
-class DataValidator:
-    """Validates data consistency across multiple CSV files"""
-
-    def __init__(self):
-        self.all_ids = set()
-        self.file_columns = {}
-        self.errors = []
-        self.warnings = []
-        self.files_processed = 0
-
-    def validate_columns(self, df, filename):
-        """Ensure CSV has all required columns"""
-        missing_columns = set(REQUIRED_COLUMNS) - set(df.columns)
-        extra_columns = set(df.columns) - set(REQUIRED_COLUMNS)
-
-        if missing_columns:
-            self.errors.append(f"{filename}: Missing required columns: {missing_columns}")
-            return False
-
-        if extra_columns:
-            self.warnings.append(f"{filename}: Extra columns found (will be included): {extra_columns}")
-
-        self.file_columns[filename] = list(df.columns)
-        return True
-
-    def validate_ids(self, df, filename):
-        """Check for duplicate request_type+agency combinations across all files"""
-        if 'request_type' not in df.columns or 'agency_short' not in df.columns:
-            return True  # Skip if columns don't exist
-
-        # Create unique IDs from request_type + agency_short
-        file_ids = set(df['request_type'].astype(str) + '|' + df['agency_short'].astype(str))
-
-        # Check for duplicates within this file
-        df_ids = df['request_type'].astype(str) + '|' + df['agency_short'].astype(str)
-        if len(df_ids) != len(file_ids):
-            duplicate_combos = df_ids[df_ids.duplicated()].tolist()
-            self.errors.append(f"{filename}: Contains duplicate permit-agency combinations: {duplicate_combos}")
-            return False
-
-        # Check for duplicates across files
-        overlap = self.all_ids.intersection(file_ids)
-        if overlap:
-            self.errors.append(f"{filename}: Permit-agency combinations already exist in other files: {overlap}")
-            return False
-
-        self.all_ids.update(file_ids)
-        return True
-
-    def validate_data_types(self, df, filename):
-        """Validate data types and content"""
-        issues = []
-
-        # Check for empty required fields
-        for col in ['agency_short', 'request_type', 'location_applicability']:
-            if col in df.columns:
-                if df[col].isna().any() or (df[col] == '').any():
-                    issues.append(f"Empty values in required column '{col}'")
-
-        if issues:
-            self.errors.append(f"{filename}: Data validation issues: {'; '.join(issues)}")
-            return False
-
-        return True
-
-    def print_report(self):
-        """Print validation report"""
-        print("\n" + "="*60)
-        print("DATA VALIDATION REPORT")
-        print("="*60)
-
-        if self.errors:
-            print("\n❌ ERRORS (must fix):")
-            for error in self.errors:
-                print(f"  - {error}")
-
-        if self.warnings:
-            print("\n⚠️  WARNINGS (review):")
-            for warning in self.warnings:
-                print(f"  - {warning}")
-
-        if not self.errors:
-            print("\n✅ All validations passed!")
-            print(f"  - Total unique permits: {len(self.all_ids)}")
-            print(f"  - Files processed: {self.files_processed}")
-
-        print("="*60 + "\n")
-
-        return len(self.errors) == 0
-
-
 class SiteGenerator:
-    """Main site generator class with multi-CSV support"""
+    """Main site generator class"""
 
     def __init__(self, base_dir=None):
         """
@@ -172,12 +66,8 @@ class SiteGenerator:
         self.stats = {
             'pages_generated': 0,
             'errors': 0,
-            'start_time': datetime.now(),
-            'files_loaded': 0
+            'start_time': datetime.now()
         }
-
-        # Data validator
-        self.validator = DataValidator()
 
     def slugify(self, text):
         """
@@ -228,101 +118,29 @@ class SiteGenerator:
         # Combine: state-request-type
         return f"{state_slug}-{request_slug}"
 
-    def load_all_csv_files(self):
+    def load_data(self, csv_file):
         """
-        Load and validate all CSV files from data directory
-
-        Returns:
-            Combined pandas DataFrame with all data
-        """
-        csv_files = sorted(glob.glob(os.path.join(self.data_dir, '*.csv')))
-
-        if not csv_files:
-            print(f"❌ No CSV files found in {self.data_dir}")
-            sys.exit(1)
-
-        print(f"\n📁 Found {len(csv_files)} CSV file(s):")
-        for file in csv_files:
-            print(f"  - {os.path.basename(file)}")
-
-        all_dataframes = []
-
-        for csv_file in csv_files:
-            filename = os.path.basename(csv_file)
-            print(f"\n📋 Processing {filename}...")
-
-            try:
-                # Read CSV
-                df = pd.read_csv(csv_file)
-                print(f"  - Rows: {len(df)}")
-
-                # Validate
-                if not self.validator.validate_columns(df, filename):
-                    continue
-
-                if not self.validator.validate_ids(df, filename):
-                    continue
-
-                if not self.validator.validate_data_types(df, filename):
-                    continue
-
-                # Add source file column for tracking
-                df['source_file'] = filename
-                all_dataframes.append(df)
-                self.validator.files_processed += 1
-                self.stats['files_loaded'] += 1
-                print(f"  ✓ Validated successfully")
-
-            except Exception as e:
-                self.validator.errors.append(f"{filename}: Failed to read - {str(e)}")
-                continue
-
-        if not all_dataframes:
-            print("❌ No valid CSV files to process!")
-            sys.exit(1)
-
-        # Combine all dataframes
-        combined_df = pd.concat(all_dataframes, ignore_index=True, sort=False)
-
-        # Ensure consistent column order (required columns first, then alphabetical extras)
-        extra_cols = [col for col in combined_df.columns
-                      if col not in REQUIRED_COLUMNS + ['source_file']]
-        column_order = REQUIRED_COLUMNS + sorted(extra_cols) + ['source_file']
-        combined_df = combined_df[column_order]
-
-        print(f"\n✅ Combined {len(combined_df)} total records from {self.stats['files_loaded']} file(s)")
-
-        return combined_df
-
-    def load_data(self, csv_file=None):
-        """
-        Load data - supports both single file (legacy) and multi-file modes
+        Load data from CSV file
 
         Args:
-            csv_file: Optional specific CSV file (for backward compatibility)
-                     If None, loads ALL CSV files from data directory
+            csv_file: Path to CSV file
 
         Returns:
             pandas DataFrame with loaded data
         """
-        if csv_file:
-            # Legacy single-file mode
-            csv_path = os.path.join(self.data_dir, csv_file)
-            print(f"📂 Loading data from: {csv_path}")
+        csv_path = os.path.join(self.data_dir, csv_file)
+        print(f"📂 Loading data from: {csv_path}")
 
-            try:
-                df = pd.read_csv(csv_path)
-                print(f"✓ Loaded {len(df)} records")
-                return df
-            except FileNotFoundError:
-                print(f"✗ Error: CSV file not found: {csv_path}")
-                sys.exit(1)
-            except Exception as e:
-                print(f"✗ Error loading CSV: {e}")
-                sys.exit(1)
-        else:
-            # New multi-file mode
-            return self.load_all_csv_files()
+        try:
+            df = pd.read_csv(csv_path)
+            print(f"✓ Loaded {len(df)} records")
+            return df
+        except FileNotFoundError:
+            print(f"✗ Error: CSV file not found: {csv_path}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"✗ Error loading CSV: {e}")
+            sys.exit(1)
 
     def generate_page(self, template_name, data, output_path):
         """
@@ -728,31 +546,6 @@ class SiteGenerator:
 
         print(f"✓ Data JSON generated: {json_path}")
 
-    def generate_build_manifest(self, df):
-        """Generate build manifest with file info for debugging"""
-        print("\n📋 Generating build manifest...")
-
-        # Count permits per source file
-        permits_by_file = df.groupby('source_file').size().to_dict() if 'source_file' in df.columns else {}
-
-        manifest = {
-            'build_time': datetime.now().isoformat(),
-            'generator_version': '2.0',
-            'total_pages': self.stats['pages_generated'],
-            'total_permits': len(df),
-            'files_processed': self.stats['files_loaded'],
-            'permits_per_file': permits_by_file,
-            'jurisdictions': sorted(df['agency_short'].unique().tolist()) if 'agency_short' in df.columns else [],
-            'validation_warnings': self.validator.warnings,
-            'python_version': sys.version
-        }
-
-        manifest_path = os.path.join(self.output_dir, 'build_manifest.json')
-        with open(manifest_path, 'w', encoding='utf-8') as f:
-            json.dump(manifest, f, indent=2, ensure_ascii=False)
-
-        print(f"✓ Build manifest created: {manifest_path}")
-
     def generate_robots_txt(self):
         """Generate robots.txt with sitemap location"""
         print("\n🤖 Generating robots.txt...")
@@ -811,7 +604,6 @@ class SiteGenerator:
         print("📊 GENERATION STATISTICS")
         print("=" * 60)
         print(f"Pages generated: {self.stats['pages_generated']}")
-        print(f"CSV files loaded: {self.stats['files_loaded']}")
         print(f"Errors: {self.stats['errors']}")
         print(f"Duration: {duration:.2f} seconds")
         print(f"Output directory: {self.output_dir}")
@@ -820,16 +612,11 @@ class SiteGenerator:
     def generate(self):
         """Run the complete site generation process"""
         print("\n" + "=" * 60)
-        print("🏛️  PERMITINDEX STATIC SITE GENERATOR v2.0")
+        print("🏛️  PERMITINDEX STATIC SITE GENERATOR")
         print("=" * 60)
 
-        # Load and validate all CSV files
-        df = self.load_data()  # Calls load_all_csv_files() when no argument
-
-        # Print validation report
-        if not self.validator.print_report():
-            print("❌ Build failed due to validation errors")
-            return 1
+        # Load data once
+        df = self.load_data('permits.csv')
 
         # Generate homepage
         self.generate_homepage(df)
@@ -846,9 +633,6 @@ class SiteGenerator:
         # Generate data.json
         self.generate_data_json(df)
 
-        # Generate build manifest
-        self.generate_build_manifest(df)
-
         # Generate robots.txt
         self.generate_robots_txt()
 
@@ -860,8 +644,6 @@ class SiteGenerator:
 
         if self.stats['errors'] == 0:
             print("✅ Site generation completed successfully!\n")
-            if self.validator.warnings:
-                print(f"⚠️  {len(self.validator.warnings)} warning(s) - see build_manifest.json for details\n")
             return 0
         else:
             print("⚠️  Site generation completed with errors.\n")
