@@ -378,7 +378,7 @@
                             <h2 class="text-2xl font-bold mb-2" style="color: white;">Ready to Apply?</h2>
                             <p style="color: rgba(255,255,255,0.9);">Complete your application online through the official portal</p>
                         </div>
-                        <a href="{{ payment_form_url }}" target="_blank" rel="noopener noreferrer" class="star-button flex-shrink-0 ml-4">
+                        <a href="{{ payment_form_url }}" target="_blank" rel="noopener noreferrer" class="star-button flex-shrink-0 ml-4" onclick="trackApplyClick()">
                             Apply Now →
                         </a>
                     </div>
@@ -824,51 +824,99 @@
 
                     <!-- Willingness to Pay Widget -->
                     <div class="mt-6 pt-6" style="border-top: 1px solid var(--border);">
-                        <h3 class="text-sm font-medium mb-2" style="color: var(--text);">Value of Automation</h3>
-                        <p class="text-xs mb-3" style="color: var(--text-light);">How much would you pay to skip this?</p>
+                        <h3 class="text-sm font-medium mb-2" style="color: var(--text);">💰 Value of Automation</h3>
+                        <p class="text-xs mb-3" style="color: var(--text-light);">How much would you pay to skip this process entirely?</p>
 
-                        <div class="space-y-2">
-                            <input type="range" id="wtpSlider" min="0" max="50" value="0" step="1" class="w-full h-2 rounded-lg appearance-none cursor-pointer slider" style="background: var(--bg-light);">
+                        <div class="space-y-3">
+                            <input type="range" id="wtpSlider" min="0" max="500" value="0" step="5" class="w-full h-2 rounded-lg appearance-none cursor-pointer slider" style="background: var(--bg-light);">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs" style="color: var(--text-light);">$0</span>
-                                <span id="wtpValue" class="text-xl font-bold" style="color: var(--primary);">$0</span>
-                                <span class="text-xs" style="color: var(--text-light);">$50+</span>
+                                <span id="wtpValue" class="text-2xl font-bold" style="color: var(--primary);">$0</span>
+                                <span class="text-xs" style="color: var(--text-light);">$500+</span>
                             </div>
-                            <button id="wtpSubmit" class="star-button secondary w-full text-sm" style="padding: 10px 20px;">
+                            <p class="text-xs" style="color: var(--text-light); text-align: center;">
+                                Based on {{ effort_hours }} of work
+                            </p>
+                            <button id="wtpSubmit" class="star-button secondary w-full text-sm" style="padding: 12px 20px;">
                                 Submit
                             </button>
+                            <div id="wtpThanks" class="hidden text-center">
+                                <p class="text-xs font-semibold" style="color: var(--success);">
+                                    ✅ Thank you! Your input helps us prioritize which permits to automate first.
+                                </p>
+                            </div>
                         </div>
 
                         <script>
-                            const slider = document.getElementById('wtpSlider');
-                            const valueDisplay = document.getElementById('wtpValue');
-                            const submitBtn = document.getElementById('wtpSubmit');
+                            (function() {
+                                const slider = document.getElementById('wtpSlider');
+                                const valueDisplay = document.getElementById('wtpValue');
+                                const submitBtn = document.getElementById('wtpSubmit');
+                                const thanksMsg = document.getElementById('wtpThanks');
 
-                            slider.addEventListener('input', function() {
-                                valueDisplay.textContent = '$' + this.value;
-                            });
+                                // Update displayed value as slider moves
+                                slider.addEventListener('input', function() {
+                                    const value = this.value;
+                                    valueDisplay.textContent = value === '500' ? '$500+' : '$' + value;
+                                });
 
-                            submitBtn.addEventListener('click', function() {
-                                const value = slider.value;
-                                // Store in localStorage for future analytics
-                                localStorage.setItem('wtp_{{ permit_slug }}', value);
-                                alert('Thank you for your feedback! Your response helps us prioritize automation efforts.');
-                                submitBtn.textContent = 'Submitted ✓';
-                                submitBtn.disabled = true;
-                                submitBtn.classList.add('bg-green-600', 'hover:bg-green-600');
-                                submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                            });
+                                // Helper function to categorize amounts for easier analysis
+                                function getAmountRange(amount) {
+                                    if (amount === 0) return '$0';
+                                    if (amount <= 25) return '$1-25';
+                                    if (amount <= 50) return '$26-50';
+                                    if (amount <= 100) return '$51-100';
+                                    if (amount <= 200) return '$101-200';
+                                    if (amount <= 300) return '$201-300';
+                                    if (amount <= 400) return '$301-400';
+                                    return '$400+';
+                                }
 
-                            // Check if already submitted
-                            if(localStorage.getItem('wtp_{{ permit_slug }}')) {
-                                const savedValue = localStorage.getItem('wtp_{{ permit_slug }}');
-                                slider.value = savedValue;
-                                valueDisplay.textContent = '$' + savedValue;
-                                submitBtn.textContent = 'Submitted ✓';
-                                submitBtn.disabled = true;
-                                submitBtn.classList.add('bg-green-600', 'hover:bg-green-600');
-                                submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                            }
+                                // Handle form submission
+                                submitBtn.addEventListener('click', function() {
+                                    const amount = parseInt(slider.value);
+                                    const permitSlug = '{{ permit_slug }}';
+                                    const effortHours = '{{ effort_hours }}';
+                                    const permitType = '{{ request_type }}';
+                                    const agency = '{{ agency_short }}';
+
+                                    // Send custom event to Plausible
+                                    if (typeof plausible !== 'undefined') {
+                                        plausible('WTP Submission', {
+                                            props: {
+                                                permit: permitSlug,
+                                                amount: amount,
+                                                effort_hours: effortHours,
+                                                permit_type: permitType,
+                                                agency: agency,
+                                                amount_range: getAmountRange(amount)
+                                            }
+                                        });
+                                    }
+
+                                    // Store in localStorage to prevent duplicate submissions
+                                    localStorage.setItem('wtp_{{ permit_slug }}', amount);
+
+                                    // Show thank you message
+                                    submitBtn.style.display = 'none';
+                                    thanksMsg.classList.remove('hidden');
+
+                                    // Optional: Reset after 10 seconds
+                                    setTimeout(() => {
+                                        submitBtn.style.display = 'block';
+                                        thanksMsg.classList.add('hidden');
+                                        slider.value = 0;
+                                        valueDisplay.textContent = '$0';
+                                    }, 10000);
+                                });
+
+                                // Check if already submitted
+                                if(localStorage.getItem('wtp_{{ permit_slug }}')) {
+                                    const savedValue = localStorage.getItem('wtp_{{ permit_slug }}');
+                                    slider.value = savedValue;
+                                    valueDisplay.textContent = savedValue === '500' ? '$500+' : '$' + savedValue;
+                                }
+                            })();
                         </script>
                     </div>
                 </div>
@@ -927,5 +975,166 @@
             </div>
         </div>
     </footer>
+
+    <!-- Plausible Analytics Custom Event Tracking -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Track Apply Now button clicks
+        window.trackApplyClick = function() {
+            if (typeof plausible !== 'undefined') {
+                plausible('Apply Now Click', {
+                    props: {
+                        permit: '{{ permit_slug }}',
+                        permit_type: '{{ request_type }}',
+                        agency: '{{ agency_short }}',
+                        cost: '{{ cost }}',
+                        has_url: '{{ "true" if payment_form_url else "false" }}'
+                    }
+                });
+            }
+        };
+
+        // Track when user scrolls to "How to Apply" section
+        let howToApplyTracked = false;
+        window.addEventListener('scroll', function() {
+            if (howToApplyTracked) return;
+
+            // Find How to Apply section
+            const headings = document.querySelectorAll('h2');
+            let howToSection = null;
+            headings.forEach(h => {
+                if (h.textContent.includes('How to Apply')) {
+                    howToSection = h;
+                }
+            });
+
+            if (howToSection) {
+                const rect = howToSection.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom >= 0) {
+                    if (typeof plausible !== 'undefined') {
+                        plausible('Viewed How To Apply', {
+                            props: {
+                                permit: '{{ permit_slug }}',
+                                time_on_page: Math.round(performance.now() / 1000)
+                            }
+                        });
+                    }
+                    howToApplyTracked = true;
+                }
+            }
+        });
+
+        // Track external link clicks (to government sites)
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            if (href && href.includes('.gov')) {
+                if (typeof plausible !== 'undefined') {
+                    try {
+                        const url = new URL(href, window.location.href);
+                        plausible('External Link Click', {
+                            props: {
+                                permit: '{{ permit_slug }}',
+                                destination: url.hostname,
+                                link_type: href.includes('{{ payment_form_url }}') ? 'application_form' : 'government_site'
+                            }
+                        });
+                    } catch (err) {
+                        // Invalid URL, skip tracking
+                    }
+                }
+            }
+        });
+
+        // Track time on page (when user leaves)
+        let pageLoadTime = Date.now();
+        window.addEventListener('beforeunload', function() {
+            const timeOnPage = Math.round((Date.now() - pageLoadTime) / 1000);
+
+            // Only track if spent meaningful time (>10 seconds)
+            if (timeOnPage > 10 && typeof plausible !== 'undefined') {
+                plausible('Time On Page', {
+                    props: {
+                        permit: '{{ permit_slug }}',
+                        duration_seconds: timeOnPage,
+                        duration_range: getTimeRange(timeOnPage)
+                    }
+                });
+            }
+        });
+
+        function getTimeRange(seconds) {
+            if (seconds < 30) return '0-30s';
+            if (seconds < 60) return '30-60s';
+            if (seconds < 120) return '1-2min';
+            if (seconds < 300) return '2-5min';
+            if (seconds < 600) return '5-10min';
+            return '10min+';
+        }
+
+        // Track when user completes viewing all key sections
+        let sectionsViewed = {
+            overview: false,
+            howToApply: false,
+            documents: false
+        };
+
+        function trackSectionView(sectionName) {
+            if (!sectionsViewed[sectionName]) {
+                sectionsViewed[sectionName] = true;
+
+                // Check if all sections viewed
+                const allViewed = Object.values(sectionsViewed).every(v => v === true);
+
+                if (allViewed && typeof plausible !== 'undefined') {
+                    plausible('Permit Page Complete', {
+                        props: {
+                            permit: '{{ permit_slug }}',
+                            permit_type: '{{ request_type }}',
+                            has_apply_button: '{{ "true" if payment_form_url else "false" }}'
+                        }
+                    });
+                }
+            }
+        }
+
+        // Use Intersection Observer to track section views
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.getAttribute('data-track-section');
+                    if (sectionId) {
+                        trackSectionView(sectionId);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe key sections when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-track overview (top of page)
+            trackSectionView('overview');
+
+            // Find and mark sections for tracking
+            const headings = document.querySelectorAll('h2');
+            headings.forEach(h => {
+                const text = h.textContent.toLowerCase();
+                if (text.includes('how to apply')) {
+                    const section = h.closest('section') || h.parentElement;
+                    section.setAttribute('data-track-section', 'howToApply');
+                    observer.observe(section);
+                } else if (text.includes('document') || text.includes('required')) {
+                    const section = h.closest('section') || h.parentElement;
+                    section.setAttribute('data-track-section', 'documents');
+                    observer.observe(section);
+                }
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

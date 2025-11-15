@@ -547,5 +547,100 @@
             </div>
         </div>
     </footer>
+
+    <!-- Plausible Analytics Custom Event Tracking -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Track search interactions
+        const searchInput = document.querySelector('[type="search"]') ||
+                           document.querySelector('#search') ||
+                           document.querySelector('[placeholder*="search" i]');
+
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    if (e.target.value.length > 2 && typeof plausible !== 'undefined') {
+                        plausible('Search Query', {
+                            props: {
+                                query_length: e.target.value.length,
+                                has_results: document.querySelectorAll('.permit-card, a[href*="/"]').length > 0
+                            }
+                        });
+                    }
+                }, 1000);
+            });
+        }
+
+        // Track permit card clicks from homepage
+        document.addEventListener('click', function(e) {
+            const permitLink = e.target.closest('a[href]');
+            if (!permitLink) return;
+
+            const href = permitLink.getAttribute('href');
+
+            // Track internal permit page links (not footer links, not #)
+            if (href && href.includes('/') && !href.includes('#') && !href.includes('mailto') && !href.includes('http')) {
+                // Extract permit slug from URL
+                const parts = href.split('/').filter(Boolean);
+                const permitSlug = parts.length > 0 ? parts[parts.length - 1] : 'unknown';
+
+                if (typeof plausible !== 'undefined') {
+                    plausible('Permit Card Click', {
+                        props: {
+                            permit_clicked: permitSlug,
+                            section: getCardSection(permitLink)
+                        }
+                    });
+                }
+            }
+        });
+
+        function getCardSection(element) {
+            // Try to find a data-section attribute
+            const section = element.closest('[data-section]');
+            if (section) {
+                return section.getAttribute('data-section');
+            }
+
+            // Fallback: determine section by class or position
+            if (element.closest('.popular-permits') || element.closest('[id*="popular"]')) {
+                return 'popular-permits';
+            } else if (element.closest('.browse-agency') || element.closest('[id*="agency"]')) {
+                return 'browse-by-agency';
+            } else if (element.closest('.recent-permits') || element.closest('[id*="recent"]')) {
+                return 'recent-permits';
+            }
+
+            return 'unknown';
+        }
+
+        // Track homepage engagement - time on page
+        let pageLoadTime = Date.now();
+        window.addEventListener('beforeunload', function() {
+            const timeOnPage = Math.round((Date.now() - pageLoadTime) / 1000);
+
+            if (timeOnPage > 5 && typeof plausible !== 'undefined') {
+                plausible('Homepage Time On Page', {
+                    props: {
+                        duration_seconds: timeOnPage,
+                        duration_range: getTimeRange(timeOnPage)
+                    }
+                });
+            }
+        });
+
+        function getTimeRange(seconds) {
+            if (seconds < 30) return '0-30s';
+            if (seconds < 60) return '30-60s';
+            if (seconds < 120) return '1-2min';
+            if (seconds < 300) return '2-5min';
+            return '5min+';
+        }
+    })();
+    </script>
 </body>
 </html>
